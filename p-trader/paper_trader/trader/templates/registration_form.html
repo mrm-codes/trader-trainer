@@ -1,0 +1,17 @@
+
+ 
+ {% if form.errors %}
+    <p>There were an error with your form, please try again ..</p>
+ {% endif %}
+
+ <div class="alert-msg">
+
+ </div>
+
+<h1>Register here!</h1>
+
+<form method="post" action="">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button type="submit">Register Now</button>
+</form>

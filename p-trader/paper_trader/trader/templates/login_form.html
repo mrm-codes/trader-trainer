@@ -1,0 +1,16 @@
+
+
+{% load i18n %}
+
+{% block content %}
+<h1>Login</h1>
+<form method="post" action="">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="{% trans 'Login' %}" />
+    <input type="hidden" name="next" value="{{ next }}" />
+</form>
+
+
+<p>{% trans "Not a member?" %} <a href="{% url 'register_user' %}">{% trans "Register" %}</a>.</p>
+{% endblock %}
