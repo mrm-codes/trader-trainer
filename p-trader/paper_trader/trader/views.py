@@ -12,6 +12,9 @@ def about(request):
 def contact(request):
     return render(request, 'contact.html')
 
+def faq(request):
+    return render(request, 'faq.html')
+
 def login_user(request):
     form = AuthenticationForm()
     if request.method == 'POST':

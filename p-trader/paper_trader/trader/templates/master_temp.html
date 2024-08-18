@@ -9,9 +9,33 @@
 
 </head>
 <body>
+  <div class="nav">
+    <div class="logo">Trader <span>Trainer</span> 
+        <span class="up"><i class="fa-solid fa-arrow-up"></i></span> 
+        <span class="down"><i class="fa-solid fa-arrow-down"></i></i></span>
+        
+
+        
+    </div>
+   
+    <div class="nav-items">
+        <a href="{% url 'base' %}">Home</a>
+        <a href="{% url 'about' %}">About</a>
+        <a href="{% url 'contact' %}">Contact</a>
+        <a href="{% url 'faq' %}">FAQ's</a>
+    </div>
+
+    <div class="nav-btn">
+        <a href="{% url 'register_user' %}">Register</a>
+        <a href="{% url 'login_user' %}">Login</a>
+    </div>
+
+</div>
 
 {% block content %}
 {% endblock %}
-
+<div class="footer">
+  Trader Trainer © All the rights reserved 2024
+</div>
 </body>
 </html>

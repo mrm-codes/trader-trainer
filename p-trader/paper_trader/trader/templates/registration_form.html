@@ -1,12 +1,11 @@
-
+{% extends 'master_temp.html' %}
  
+
+{% block content %}
  {% if form.errors %}
     <p>There were an error with your form, please try again ..</p>
  {% endif %}
-
- <div class="alert-msg">
-
- </div>
+<div class="register-container">
 
 <h1>Register here!</h1>
 
@@ -15,3 +14,6 @@
     {{form.as_p}}
     <button type="submit">Register Now</button>
 </form>
+
+</div>
+{% endblock %}
