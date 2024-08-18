@@ -2,18 +2,34 @@
  
 
 {% block content %}
+<div class="register">
  {% if form.errors %}
-    <p>There were an error with your form, please try again ..</p>
+ <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <strong>Oops!</strong> Something went wrong with your registration. Please try again later
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
  {% endif %}
-<div class="register-container">
 
-<h1>Register here!</h1>
 
-<form method="post" action="">
-    {% csrf_token %}
-    {{form.as_p}}
-    <button type="submit">Register Now</button>
-</form>
-
+    <form method="post" action="">
+        <h1>Register here!</h1>
+        {% csrf_token %}
+        {{form.as_p}}
+        <div class="form-group">
+            <div class="form-check">
+            <input class="form-check-input is-invalid" type="checkbox" value="" id="invalidCheck3" required>
+            <label class="form-check-label" for="invalidCheck3">
+                Agree to terms and conditions
+            </label>
+            <div class="invalid-feedback">
+                You must agree before submitting.
+            </div>
+            </div>
+        </div>
+        <button type="submit">Register Now</button>
+    </form>
+   
 </div>
 {% endblock %}

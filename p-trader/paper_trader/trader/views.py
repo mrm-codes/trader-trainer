@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, authenticate
+from .forms import RegisterUserForm
 
 # Create your views here.
 def base(request):
@@ -29,14 +30,14 @@ def login_user(request):
 
 def register_user(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = RegisterUserForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)           
             return redirect ('/login_user')
 
     else:
-        form = UserCreationForm()       
+        form = RegisterUserForm()       
     return render(request, 'registration_form.html', {'form': form,})
 
 def user_dash(request):

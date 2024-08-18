@@ -60,30 +60,50 @@
     color: #eee;
 }
 
+.nav-items a:hover{
+    color: #6683f7;
+    text-decoration: none;
+}
+
 .nav-btn{
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: end;
-    width: 20%;
+    width: 15%;
     font-family: 'PT Serif' ,'Barlow condensed';
     text-decoration: none;
 }
 
 .nav-btn a{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
     margin: 0 1rem;
-    font-size: 1.25rem;
+    align-self: center;
+    text-align: center;
     background: none;
-    padding: 0 .5rem;
-    font-family: 'PT Serif' ,'Barlow condensed';
-    border-radius: .5rem;
     outline: none;
+    border: none;
+    background-color: #6683f7;
+    color: #eee;
+    box-shadow: 0 2px 2px 0 #2945b4;
+    border-radius: .25rem;
+    width: 45%;
     cursor: pointer;
-    text-decoration: none;
-    color: #6683f7;
-    border: 1px solid #eee;
+    align-self: center;
+    font-size: 1rem;
+    font-weight: 700;
+
 }
 
+.nav-btn a:hover{
+    color: #0c040b;
+    background-color: #eee;
+    cursor: pointer;
+    text-decoration: none;
+}
 /*-----content----*/
 .sec-01, .sec-02{
     display: flex;
@@ -157,6 +177,50 @@ img{
 
 .faq ol p{margin-bottom: 1.5rem;}
 /*Register*/
+.register{
+    display: flex;
+    flex-direction: column;
+    justify-self: center;
+    align-self: center;
+    align-items: center;
+    margin: 0 15%;
+    width: 80%;
+}
+.register h1{font-size: 3rem; font-weight: 700;}
+.register form{
+   margin: 1rem;
+    width: 60%;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    
+    box-shadow: 0 2px 1px 0 #000000;
+}
 
-
+.register form label{font-weight: 700;
+font-size: 1.25rem;}
+.register form li {
+    font-size: .75rem;
+    padding: 0 0  0 1rem;
+    list-style: none;
+    color: #ff0000;
+}
+.register form button{
+    background: none;
+    outline: none;
+    border: none;
+    background-color: #6683f7;
+    box-shadow: 0 2px 2px 0 #2945b4;
+    border-radius: .25rem;
+    width: 25%;
+    cursor: pointer;
+    align-self: center;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+.register form button:hover{
+    color: #000000;
+    background-color: #eee;
+}
 /*Login*/
