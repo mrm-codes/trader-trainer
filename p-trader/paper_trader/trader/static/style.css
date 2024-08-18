@@ -116,12 +116,35 @@ img{
 }
 
 /*About*/
-
-
+.about{padding: 1rem;}
+.about h1{font-size: 3rem;}
+.about div{
+    border: 1px solid #6683f7;
+    margin: 1rem 0;
+    padding: .5rem;
+}
+.about div h2{font-size: 2rem;}
+.about div li{
+    list-style:'-';
+    padding: 0 .5rem;
+}
 
 /*Contact*/
-
-
+.contact{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-self: center;
+    justify-content: center;
+    margin: 15%;
+}
+.contact div{
+    margin: 2rem 0;
+}
+.contact h1{font-size: 3rem;}
+.contact div h2{color: #0ed391;}
+.contact div h2 span{color: #0c040b; cursor: pointer;}
+.contact div h2 span:hover{color: #6683f7; cursor: pointer;}
 
 /*FAQ*/
 .faq{margin: .5rem 1rem;}
@@ -129,7 +152,7 @@ img{
 .faq ol li{
     font-size: 1.45rem;
     font-weight: 700;
-    color: #ff4b1e;
+    color: #6237fd;
 }
 
 .faq ol p{margin-bottom: 1.5rem;}
