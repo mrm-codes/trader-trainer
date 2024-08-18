@@ -22,26 +22,29 @@
 
 }
 
-.logo{
+.nav a {
     font-size: 2rem;
     font-weight: 700;
     margin: 0 .75rem;
     width: 20%;
     cursor: pointer;
+    color: #eee;
 }
+.nav a:hover{text-decoration: none;
+color: #eee;}
 
-.logo span{color: #6683f7}
-.logo .up{
+a span{color: #6683f7}
+a .up{
     font-size: 1.5rem;
     color:#0ed391
 }
 
-.logo .down{
+a .down{
     font-size: 1.5rem;
     color:#ff0000;
 }
 
-.nav-items{
+.nav .nav-items{
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -58,6 +61,7 @@
     cursor: pointer;
     text-decoration: none;
     color: #eee;
+    font-size: 1.5rem;
 }
 
 .nav-items a:hover{
@@ -177,7 +181,7 @@ img{
 
 .faq ol p{margin-bottom: 1.5rem;}
 /*Register*/
-.register{
+.register, .login{
     display: flex;
     flex-direction: column;
     justify-self: center;
@@ -186,8 +190,8 @@ img{
     margin: 0 15%;
     width: 80%;
 }
-.register h1{font-size: 3rem; font-weight: 700;}
-.register form{
+.register h1, .login h1{font-size: 3rem; font-weight: 700;}
+.register form, .login form{
    margin: 1rem;
     width: 60%;
     padding: 1rem;
@@ -198,7 +202,7 @@ img{
     box-shadow: 0 2px 1px 0 #000000;
 }
 
-.register form label{font-weight: 700;
+.register form label, .login form label{font-weight: 700;
 font-size: 1.25rem;}
 .register form li {
     font-size: .75rem;
@@ -206,7 +210,7 @@ font-size: 1.25rem;}
     list-style: none;
     color: #ff0000;
 }
-.register form button{
+.register form button, .login input[type='submit']{
     background: none;
     outline: none;
     border: none;
@@ -219,7 +223,7 @@ font-size: 1.25rem;}
     font-size: 1.25rem;
     font-weight: 700;
 }
-.register form button:hover{
+.register form button:hover, .login input[type='submit']:hover{
     color: #000000;
     background-color: #eee;
 }

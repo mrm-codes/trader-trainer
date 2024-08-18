@@ -3,14 +3,26 @@
 {% load i18n %}
 
 {% block content %}
-<h1>Login</h1>
+<div class="login">
+    {% if form.errors %}
+ <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <strong>Invalid Credentials</strong> Please try again later
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+ {% endif %}
+
 <form method="post" action="">
+    <h1>Login</h1>
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="{% trans 'Login' %}" />
     <input type="hidden" name="next" value="{{ next }}" />
+    
 </form>
 
 
 <p>{% trans "Not a member?" %} <a href="{% url 'register_user' %}">{% trans "Register" %}</a>.</p>
+</div>
 {% endblock %}

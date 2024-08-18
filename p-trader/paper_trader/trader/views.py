@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, authenticate
-from .forms import RegisterUserForm
+from .forms import RegisterUserForm, LoginUserForm
 
 # Create your views here.
 def base(request):
@@ -17,7 +17,7 @@ def faq(request):
     return render(request, 'faq.html')
 
 def login_user(request):
-    form = AuthenticationForm()
+    form = LoginUserForm()
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
