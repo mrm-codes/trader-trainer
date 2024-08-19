@@ -1,0 +1,126 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Barlow' ,'Roboto condensed';
+    background-color: #f0f0f0;
+    
+}
+
+.user-navbar{
+   background-color: #1c2731;
+   padding-top: 1rem;
+   display: flex;
+   flex-direction: row;
+   align-content: center;
+   width: 100%;
+   overflow: hidden;
+}
+
+.app-tools{
+    background-color: inherit;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    margin: 0 .25rem;
+    list-style: none;
+    width: 70%;
+}
+.app-tools li, .user-profile li{
+    color: #f0f0f0;
+    background-color: #1c2731;
+    text-decoration: none;
+    margin: 0 1rem;
+    cursor: pointer;
+}
+
+.user-profile{
+    background-color: inherit;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: end;
+    margin: 0 .25rem;
+    list-style: none;
+    width: 30%;
+}
+
+.user-profile li span, .user-profile li i{
+    font-weight: 700;
+    background-color: #1c2731;
+    color: #f0f0f0;
+}
+
+.user-profile li i:hover{color: #d34d0f;}
+
+/*----------------dropdown settings-------------*/
+
+
+/*layout*/
+.dash-container{
+    background-color: #aebece;
+    color:#d34d0f;
+    display: flex;
+    flex-direction: column;
+}
+
+.dash-container div{
+    display: flex;
+    flex-direction: row;
+    border: 1px solid #1c2731;
+    margin: .5rem;
+}
+#market-data h3{
+    color:#d34d0f;
+    background: none;
+    
+}
+
+#market-data{
+    background-color: #aebece;
+    color: #222;
+    padding: 1rem;
+    width: 20%;
+}
+
+#trade-view{
+    width: 75%;
+    padding: 1rem;
+   
+}
+
+div#trade-view .trade-btn{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 8%;
+    border: none;
+    position: absolute;
+    top: 3rem;
+    left: 22rem;
+    background: none;
+   
+}
+button.buy{
+    margin: 1rem;
+    background-color: #3889da;
+    color: #f0f0f0;
+    padding: 0 1rem;
+    cursor: pointer;
+}
+
+button.sell{
+    margin: 1rem;
+    background-color: #ff0000;
+    color: #f0f0f0;
+    padding: 0 1rem;
+    cursor: pointer;
+}
+
+#portfolio{
+    padding: 1rem;
+}
+

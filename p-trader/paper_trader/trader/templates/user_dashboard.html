@@ -1,6 +1,22 @@
 {% extends 'master_user_dash.html' %}
 
 {%block content%}
-<h3>Wellcome {{user}}</h3>
-
+<div class="dash-container">
+    <div>
+        <div id="market-data">
+            <h3>Market Overview</h3>
+        </div>
+        <div id="trade-view">
+            <div class="trade-btn">
+                <button class="buy">Buy</button>
+                <button class="sell">Sell</button>
+            </div>
+            
+        </div>
+    </div>
+    <div id="portfolio">
+        <h5>Portfolio</h5>
+        
+    </div>
+</div>
 {%endblock%}

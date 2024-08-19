@@ -138,19 +138,19 @@ SITE_ID = 1
 
 # Email settings
 
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+__EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
-EMAIL_HOST = "smtp.gmail.com"
+__EMAIL_HOST = "smtp.gmail.com"
 
 EMAIL_HOST_USER = "tradertrainermad@gmail.com"
 
-EMAIL_HOST_PASSWORD = "YUmakeUS"
+__EMAIL_HOST_PASSWORD = "YUmakeUS"
 
-EMAIL_PORT = 587   # you have to use SSL or TLS
+__EMAIL_PORT = 587   # you have to use SSL or TLS
 
 EMAIL_USE_TLS = True 
 
-DEFAULT_FROM_EMAIL = "tradertrainermad@gmail.com"
+__DEFAULT_FROM_EMAIL = "tradertrainermad@gmail.com"
 
 
 #compressor settings
