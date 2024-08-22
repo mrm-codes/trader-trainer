@@ -11,30 +11,37 @@
                         <th>Symbol</th>
                         <th>Bid</th>
                         <th>Ask</th>
-                        <th>Daily Change %</th>
+                        <th>Daily Change</th>
                     </tr>
                 </thead>
 
                 <tbody>
                     <tr>
-                        <td>{{ticker}}</td>
-                        <td>{{bid}}</td>
-                        <td>{{ask}}</td>
-                        <td>2%</td>
+                        <td>{{AAPL.ticker}}</td>
+                        <td>{{AAPL.bid}}</td>
+                        <td>{{AAPL.ask}}</td>
+                        <td>{{AAPL.daily_change}}%</td>
                     </tr>
 
                     <tr>
-                        <td>{{name}}</td>
-                        <td>12.5</td>
-                        <td>12.8</td>
-                        <td>2%</td>
+                        <td>{{TSLA.ticker}}</td>
+                        <td>{{TSLA.bid}}</td>
+                        <td>{{TSLA.ask}}</td>
+                        <td>{{TSLA.daily_change}}%</td>
                     </tr>
 
                     <tr>
-                        <td>{{name}}</td>
-                        <td>12.5</td>
-                        <td>12.8</td>
-                        <td>2%</td>
+                        <td>{{MSFT.ticker}}</td>
+                        <td>{{MSFT.bid}}</td>
+                        <td>{{MSFT.ask}}</td>
+                        <td>{{MSFT.daily_change}}%</td>
+                    </tr>
+
+                    <tr>
+                        <td>{{NFLX.ticker}}</td>
+                        <td>{{NFLX.bid}}</td>
+                        <td>{{NFLX.ask}}</td>
+                        <td>{{NFLX.daily_change}}%</td>
                     </tr>
                 </tbody>
             </table>

@@ -5,6 +5,7 @@ import yahoo_fin.stock_info as si
 import yfinance as yf
 import time
 import requests
+from django.shortcuts import render
 
 import datetime
 
@@ -34,66 +35,50 @@ class Transaction(models.Model):
     def __str__(self):
         return f"{self.symbol}: {self.quantity} shares at {self.price}"
 
-
+'''
 class Overview(models.Model):
-    
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
 
-    #fetching bid and ask
-    ticker = 'TSLA'
-    
-
-    #fetching prices
-    def live_price(ticker):
+    def stock_data(ticker):
         stock = yf.Ticker(ticker)
         data_history = stock.history(period='1d', interval='1m ')
-
-        if not data_history.empty:
-            return data_history['Close'].iloc[-1]
-        else:
-            return None
-        
-    def daily_change(ticker):
-       
-        data_history = yf.Ticker(ticker).history(period='1d', interval='1m')
-        
-         # Check if there's data available
+        message = 'No data to display'
         if not data_history.empty:
             # Get the opening price (first price of the day)
             opening_price = data_history['Open'][0]
             
             # Get the current or last close price (latest price of the day)
-            current_price = data_history['Close'].iloc[-1]
+            current_price = data_history['Close'].iloc[-1]   
+            price = round(current_price, 2)
+            
+            #gettin the current bid
+            on_price = stock.info.get('bid', 'No data available')
+            bid = round(on_price, 2)
+
+            #Getting the gurrent ask
+            off_price = stock.info.get('ask', 'No data available')
+            ask = round(off_price, 2)
 
             # Calculate daily change percentage
             daily_change_percentage = ((current_price - opening_price) / opening_price) * 100
-
-            return  round(daily_change_percentage, 2)
+            daily_change = round(daily_change_percentage, 2)
         else:
-            return None
+            print(message)
+        
+        return  {ticker: {
+                        'ticker': ticker,
+                        'bid': bid,
+                        'ask': ask,
+                        'price': price,
+                        'daily_change': daily_change
+                        }}'''
     
-    while True:
-        # Fetch the current price
-        price = round(live_price(ticker), 2)
-        daily_change_percent = daily_change(ticker)
+   
 
-        #on_price = yf.Ticker(ticker).fast_info.last_price
-        on_price = yf.Ticker(ticker).info.get('bid', 'No data available')
-        bid = round(on_price, 2)
 
-        #off_price = yf.Ticker(ticker).fast_info.previous_close
-        off_price = yf.Ticker(ticker).info.get('ask', 'No data available')
-        ask = round(off_price, 2)
-        
-        if price is not None:
-            print(f"Current price of {ticker}: ${price}")
-            print(f"{ticker} => Ask: ${ask}, Bid: ${bid}, Daily change: {daily_change_percent}%" )
-        else:
-            print(f"Failed to fetch data for {ticker}.")
-        
-        # Wait for 30 seconds before fetchingticker
-        time.sleep(30)
+    
+    
 
 
 
