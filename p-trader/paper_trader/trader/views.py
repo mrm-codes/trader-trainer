@@ -1,7 +1,15 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth import login, authenticate
+from django.shortcuts import render, redirect # type: ignore
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm # type: ignore
+from django.contrib.auth import login, authenticate # type: ignore
 from .forms import RegisterUserForm, LoginUserForm
+
+#Trading requirements
+import yahoo_fin.stock_info as si
+import yfinance as yf
+import time
+import requests
+from .models import Portfolio, Holdings, Transaction, Overview
+
 
 # Create your views here.
 def base(request):
@@ -40,5 +48,23 @@ def register_user(request):
         form = RegisterUserForm()       
     return render(request, 'registration_form.html', {'form': form,})
 
+#Trading Views
+
+
 def user_dash(request):
-    return render(request, 'user_dashboard.html')
+        ticker = Overview.ticker
+        bid = Overview.bid
+        ask = Overview.ask
+        price = Overview.price
+        context= {
+            'ticker': ticker,
+            'bid': bid,
+            'ask': ask,
+            'price': price,
+            'daily change': Overview.daily_change_percent, 
+        }
+
+        return render(request, 'user_dashboard.html', context)
+
+  
+

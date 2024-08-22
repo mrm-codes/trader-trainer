@@ -5,18 +5,57 @@
     <div>
         <div id="market-data">
             <h3>Market Overview</h3>
+            <table class="overview">
+                <thead>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Bid</th>
+                        <th>Ask</th>
+                        <th>Daily Change %</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td>{{ticker}}</td>
+                        <td>{{bid}}</td>
+                        <td>{{ask}}</td>
+                        <td>2%</td>
+                    </tr>
+
+                    <tr>
+                        <td>{{name}}</td>
+                        <td>12.5</td>
+                        <td>12.8</td>
+                        <td>2%</td>
+                    </tr>
+
+                    <tr>
+                        <td>{{name}}</td>
+                        <td>12.5</td>
+                        <td>12.8</td>
+                        <td>2%</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
         <div id="trade-view">
             <div class="trade-btn">
                 <button class="buy">Buy</button>
                 <button class="sell">Sell</button>
             </div>
-            
+            <!-- templates/stock_chart.html -->
+            <h1>{{price}}</h1>
+
         </div>
     </div>
     <div id="portfolio">
         <h5>Portfolio</h5>
-        
+        <p>{{user}}:</p>
+
+        <!-- templates/stock_list.html -->
+
+
     </div>
 </div>
 {%endblock%}

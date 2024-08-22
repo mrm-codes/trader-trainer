@@ -83,7 +83,23 @@
     color: #222;
     padding: 1rem;
     width: 20%;
+    display: inline-block;
 }
+
+/*Table*/
+.overview{
+    border: 1px solid #1c2731;
+    
+}
+
+
+.overview thead, .overview tbody tr{
+    border: 1px solid #1c2731;
+}
+th, td{
+    padding: .5rem 1rem;
+}
+
 
 #trade-view{
     width: 75%;
@@ -124,3 +140,5 @@ button.sell{
     padding: 1rem;
 }
 
+
+/*Table*/
