@@ -4,8 +4,11 @@ from django.contrib.auth.models import User
 import yahoo_fin.stock_info as si
 import yfinance as yf
 import time
-import requests
-from django.shortcuts import render
+
+import pandas as pd
+import plotly.graph_objs as go
+from django.http import JsonResponse
+from plotly.offline import plot
 
 import datetime
 
@@ -35,11 +38,15 @@ class Transaction(models.Model):
     def __str__(self):
         return f"{self.symbol}: {self.quantity} shares at {self.price}"
 
-'''
+
+        
+
+
 class Overview(models.Model):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
 
+    
     def stock_data(ticker):
         stock = yf.Ticker(ticker)
         data_history = stock.history(period='1d', interval='1m ')
@@ -66,18 +73,30 @@ class Overview(models.Model):
         else:
             print(message)
         
-        return  {ticker: {
-                        'ticker': ticker,
-                        'bid': bid,
-                        'ask': ask,
-                        'price': price,
-                        'daily_change': daily_change
-                        }}'''
+        return  {'ticker': 'ticker',
+                'bid': 'bid',
+                'ask': 'ask',
+                'price': 'price',
+                'daily_change': 'daily_change',
+                }
+
+
+    
+    
+    
     
    
-
-
+ 
     
+
+
+       
+
+
+
+
+
+ 
     
 
 

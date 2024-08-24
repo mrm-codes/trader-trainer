@@ -1,6 +1,8 @@
 {% extends 'master_user_dash.html' %}
 
-{%block content%}
+{% block title %} {{user}} Dashboard {% endblock %}
+
+{% block content %}
 <div class="dash-container">
     <div>
         <div id="market-data">
@@ -14,55 +16,110 @@
                         <th>Daily Change</th>
                     </tr>
                 </thead>
-
+                
                 <tbody>
                     <tr>
-                        <td>{{AAPL.ticker}}</td>
+                        <td><span class="ticker" onclick="showTicker('aaplChart')">{{AAPL.ticker}}</span></td>
                         <td>{{AAPL.bid}}</td>
                         <td>{{AAPL.ask}}</td>
                         <td>{{AAPL.daily_change}}%</td>
                     </tr>
 
                     <tr>
-                        <td>{{TSLA.ticker}}</td>
+                        <td><span class="ticker" onclick="showTicker('tslaChart')">{{TSLA.ticker}}</span></td>
                         <td>{{TSLA.bid}}</td>
                         <td>{{TSLA.ask}}</td>
                         <td>{{TSLA.daily_change}}%</td>
                     </tr>
 
                     <tr>
-                        <td>{{MSFT.ticker}}</td>
+                        <td><span class="ticker" onclick="showTicker('msftChart')">{{MSFT.ticker}}</span></td>
                         <td>{{MSFT.bid}}</td>
                         <td>{{MSFT.ask}}</td>
                         <td>{{MSFT.daily_change}}%</td>
                     </tr>
 
                     <tr>
-                        <td>{{NFLX.ticker}}</td>
+                        <td><span class="ticker" onclick="showTicker('nflxChart')">{{NFLX.ticker}}</span></td>
                         <td>{{NFLX.bid}}</td>
                         <td>{{NFLX.ask}}</td>
                         <td>{{NFLX.daily_change}}%</td>
                     </tr>
                 </tbody>
+            
             </table>
         </div>
+
         <div id="trade-view">
             <div class="trade-btn">
-                <button class="buy">Buy</button>
-                <button class="sell">Sell</button>
+            
+                {% csrf_token %}
+                
+                <input type="number"  name="volume" value="volume" placeholder="shares amount"/>
+                
+                <div>
+                    <button class="buy">Buy</button>
+                    <button class="sell">Sell</button>
+                </div>
             </div>
+            <div id="viewCharts">
             <!-- templates/stock_chart.html -->
-            <h1>{{price}}</h1>
+                <div id="aaplChart" class="ticker-content active">
+                    <div class="chart-price">
+                        <h1>APPL, inc.</h1>
+                        <h3>Price:<span> {{AAPL.price}}</span></h3>
+                    </div>
+                    <div class="chart">
+                        {{apple|safe}}
+                    </div>
+                </div>
 
+
+                <div id="tslaChart" class="ticker-content">
+                    <div class="chart-price">
+                        <h1>TESLA, inc.</h1>
+                        <h2>Price:<span> {{TSLA.price}}</span></h2>
+                    </div>
+                    <div class="chart">
+                        {{tesla|safe}}
+                    </div>
+                </div>
+
+                <div id="msftChart" class="ticker-content">
+                    <div class="chart-price">
+                        <h1>MSFT, inc.</h1>
+                        <h2>Price:<span> {{MSFT.price}}</span></h2>
+                    </div>
+                    <div class="chart">
+                        {{msft|safe}}
+                    </div>
+                </div>
+
+                <div id="nflxChart" class="ticker-content">
+                    <div class="chart-price">
+                        <h1>NFLX, inc.</h1>
+                        <h2>Price:<span> {{NFLX.price}}</span></h2>
+                    </div>
+                    <div class="chart">
+                        {{nflx|safe}}
+                    </div>
+                </div>
+
+
+            </div>
         </div>
+        
     </div>
-    <div id="portfolio">
-        <h5>Portfolio</h5>
-        <p>{{user}}:</p>
 
+    <!--Porfolio section-->
+    <div id="portfolio">
+        <h5>Portfolio</h5> <br />
+        <p>{{user}}:</p>
+        
         <!-- templates/stock_list.html -->
 
-
     </div>
+
 </div>
-{%endblock%}
+
+{% endblock %}

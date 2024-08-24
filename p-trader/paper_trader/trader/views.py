@@ -8,8 +8,11 @@ import yahoo_fin.stock_info as si
 import yfinance as yf
 import time
 import requests
-from .models import Portfolio, Holdings, Transaction
-
+from .models import Portfolio, Holdings, Transaction, Overview, TradingCharts
+import pandas as pd
+import plotly.graph_objs as go
+from django.http import JsonResponse
+from plotly.offline import plot
 
 
 # Create your views here.
@@ -53,53 +56,70 @@ def register_user(request):
 
 def user_dash(request):
     #stock data info
-    while True:
-        def stock_data(ticker):
-            stock = yf.Ticker(ticker)
-            data_history = stock.history(period='1d', interval='1m ')
-            message = 'No data to display'
-            if not data_history.empty:
-                # Get the opening price (first price of the day)
-                opening_price = data_history['Open'][0]
-                
-                # Get the current or last close price (latest price of the day)
-                current_price = data_history['Close'].iloc[-1]   
-                price = round(current_price, 2)
-                
-                #gettin the current bid
-                on_price = stock.info.get('bid', 'No data available')
-                bid = round(on_price, 2)
+    def chart(ticker):
+        start_period = '2017-01-01'
+        end_period = '2024-08-22'
+        interval = '1d'
+       
 
-                #Getting the gurrent ask
-                off_price = stock.info.get('ask', 'No data available')
-                ask = round(off_price, 2)
-
-                # Calculate daily change percentage
-                daily_change_percentage = ((current_price - opening_price) / opening_price) * 100
-                daily_change = round(daily_change_percentage, 2)
-            else:
-                print(message)
-            
-            return  {'ticker': 'ticker',
-                    'bid': 'bid',
-                    'ask': 'ask',
-                    'price': 'price',
-                    'daily_change':' daily_change',
-                    }
+        df = yf.download(ticker, start=start_period, end=end_period, interval=interval)
         
-        aapl = stock_data('AAPL')
-        tsla = stock_data('TSLA')
-        nflx = stock_data('NFLX')
-        msft = stock_data('MSFT')
+        #chartting
+            # Create a mountain chart (area chart)
+        fig = go.Figure(data=[go.Candlestick(x=df.index,
+                                            open=df['Open'],
+                                            high=df['High'],
+                                            low=df['Low'],
+                                            close=df['Close'])])
+        
+        fig.update_layout(
+            title=f'{ticker} Stock Price', 
+            xaxis_title='Date', 
+            yaxis_title='Price (USD)', 
+            height=600,  # Set height
+            width=1200,  # Set width
+            autosize=True,
+           
+            margin=dict(l=20, r=20, t=40, b=40))
+        
+        ticker_chart = fig.to_html(full_html=False)
+        return ticker_chart
+    
+    aapl_chart = chart('AAPL')
+    tsla_chart = chart('TSLA')
+    nflx_chart = chart('NFLX')
+    msft_chart = chart('MSFT')
+           
+    while True:
+
+        aapl = Overview.stock_data('AAPL')
+        tsla = Overview.stock_data('TSLA')
+        nflx = Overview.stock_data('NFLX')
+        msft = Overview.stock_data('MSFT')
+
+        #charts
+        #aapl_chart_html = my_charts('AAPL')
+        #tsla_chart_html = TradingCharts.chart_data('TSLA')
+        #nflx_chart_html = TradingCharts.chart_data('NFLX')
+        #msft_chart_html = TradingCharts.chart_data('MSFT')
 
         context = {'AAPL': aapl,
                    'TSLA': tsla,
                    'NFLX': nflx,
                    'MSFT': msft,
+                   'apple': aapl_chart,
+                   'tesla': tsla_chart,
+                   'msft': msft_chart,
+                   'nflx': nflx_chart,
                    }
         
-        time.sleep(10)
+        time.sleep(5) # 60s interval until fetches another data
         
         return render(request, 'user_dashboard.html', context)
-
     
+
+#{'plot': plot_div}
+    
+
+
+

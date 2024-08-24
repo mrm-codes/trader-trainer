@@ -5,12 +5,13 @@
     padding: 0;
     box-sizing: border-box;
     font-family: 'Barlow' ,'Roboto condensed';
-    background-color: #f0f0f0;
+    
     
 }
 
+
 .user-navbar{
-   background-color: #1c2731;
+   background-color: #000000;
    padding-top: 1rem;
    display: flex;
    flex-direction: row;
@@ -29,8 +30,8 @@
     width: 70%;
 }
 .app-tools li, .user-profile li{
-    color: #f0f0f0;
-    background-color: #1c2731;
+    color: #eee;
+    background-color: #000000;
     text-decoration: none;
     margin: 0 1rem;
     cursor: pointer;
@@ -49,8 +50,8 @@
 
 .user-profile li span, .user-profile li i{
     font-weight: 700;
-    background-color: #1c2731;
-    color: #f0f0f0;
+    background-color: #000000;
+    color: #eee;
 }
 
 .user-profile li i:hover{color: #d34d0f;}
@@ -60,7 +61,7 @@
 
 /*layout*/
 .dash-container{
-    background-color: #aebece;
+    background-color: #f2f2f2;
     color:#d34d0f;
     display: flex;
     flex-direction: column;
@@ -69,8 +70,8 @@
 .dash-container div{
     display: flex;
     flex-direction: row;
-    border: 1px solid #1c2731;
-    margin: .5rem;
+   
+    margin: .25rem;
 }
 #market-data h3{
     color:#d34d0f;
@@ -79,22 +80,24 @@
 }
 
 #market-data{
-    background-color: #aebece;
+    background-color: #fbfbfb;
     color: #222;
     padding: 1rem;
     width: 20%;
     display: inline-block;
+    align-items: center;
+    box-shadow: 0 1px 2px 0 #FFFFFF;
 }
 
 /*Table*/
 .overview{
-    border: 1px solid #1c2731;
+    border: 1px solid #99ceff;
     
 }
 
 
 .overview thead, .overview tbody tr{
-    border: 1px solid #1c2731;
+    border: 1px solid #a9d0f5;
 }
 th, td{
     padding: .5rem 1rem;
@@ -102,8 +105,12 @@ th, td{
 
 
 #trade-view{
-    width: 75%;
+    width: 90%;
     padding: 1rem;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: safe;
    
 }
 
@@ -111,21 +118,30 @@ div#trade-view .trade-btn{
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
-    width: 8%;
+    justify-content: center;
+    width: 30%;
     border: none;
-    position: absolute;
-    top: 3rem;
-    left: 22rem;
     background: none;
+    position: absolute;
+    top: 4.5rem;
+    left: 45rem;
    
 }
+
+div#trade-view .trade-btn div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
 button.buy{
     margin: 1rem;
     background-color: #3889da;
     color: #f0f0f0;
     padding: 0 1rem;
     cursor: pointer;
+    
 }
 
 button.sell{
@@ -133,12 +149,53 @@ button.sell{
     background-color: #ff0000;
     color: #f0f0f0;
     padding: 0 1rem;
+    cursor: pointer; 
+}
+
+#viewCharts{
+    width: 100%;
+    background-color: #000000;
+    padding: 0 .25rem;
+    margin: 1rem;
+    color: #eee;
+    overflow: hidden;
+   
+}
+
+#viewCharts .ticker-content{
+    display:none;
+}
+
+#viewCharts .active{
+    display:flex;
+    flex-direction: column;
+}
+
+span.ticker{
+    font-weight: 700;
     cursor: pointer;
+}
+
+div.chart-price{
+    display: flex;
+    justify-content: space-between;
+    margin: 0 .57em;
+    flex-wrap: nowrap;
+    align-content: center;
+    align-items: flex-end;
+}
+
+div.chart-price h1, div.chart-price h2{
+    margin: 0;
+    padding: 0;
 }
 
 #portfolio{
     padding: 1rem;
 }
 
+.active{display: block;}
 
-/*Table*/
+/*Charts*/
+
+
