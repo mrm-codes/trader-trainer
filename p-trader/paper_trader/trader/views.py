@@ -69,9 +69,9 @@ def register_user(request):
 @login_required
 def user_dash(request):
     #Test view------------------------
+    myportfolio = Portfolio.objects.all()
     
-    mytransactions = Transaction.objects.all()
-  
+    sell = sell_stock('AAPL', 0.5, 165.3)
     #--------------------------------
     #User account
     user = user_account(request)
@@ -82,31 +82,35 @@ def user_dash(request):
     #trade_form = trade(request)
     #Applying functions
 
-    sell_res = sell_stock("AAPL", 0.05, 155.9)
 
     if request.method == "POST":
-        deposit = DepositForm(request.POST)
-        reset = ResetForm(request.POST)
-    
-        #sell = BuyAndSellForm(request.GET)
+        deposit = DepositForm(request.POST, prefix='deposit')
+        reset = ResetForm(request.POST, prefix='reset')
+        trade_form = TransactionForm(request.POST, prefix='trade_form')
+        
         if deposit.is_valid():
             amount = deposit.cleaned_data['amount']
             user_balance, created = Account.objects.get_or_create(user=request.user)
             user_balance.balance += amount
             user_balance.save()
             message = messages.success(request, f"${amount} has been added to your balance.")
+            
             return redirect('user_dash')  # Redirect to a profile or dashboard page
+  
+        elif trade_form.is_valid():
+            print('Valid')
         elif reset.is_valid():
             user_balance, created = Account.objects.get_or_create(user=request.user)
             user_balance.balance = initial_balance
             user_balance.save()
-       
-        
-        
 
     else:
         deposit = DepositForm()
         reset = ResetForm()
+        trade_form = TransactionForm()
+        print('Not Bound')
+       
+      
         
         
         
@@ -135,13 +139,16 @@ def user_dash(request):
         context = {
             'balance': balance,
             'deposit': deposit,
-            'reset': reset,
-            'sell': sell_res,
+            #'reset': reset,
+            'sell':sell,
+            'trader': trade_form,
+            
           
             
             #'res': res,
-            'trans': mytransactions,
-            #'trade': trade_form, 
+            
+            'port': myportfolio,
+            
             # stock data
             'AAPL': aapl,
             #'TSLA': tsla,
@@ -161,7 +168,10 @@ def user_dash(request):
     
 
 
-    
+@login_required
+def transactions(request):
+    mytransactions = Transaction.objects.all()
 
+    return render(request, 'transaction.html' ,{'trans': mytransactions})
 
 

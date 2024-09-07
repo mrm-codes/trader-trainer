@@ -57,7 +57,22 @@ class Transaction(models.Model):
         return f"{self.stock.symbol}: {self.volume} shares at {self.price}"
 
 
-        
+class Trade(models.Model):
+    SYMBOL_CHOICES = [
+        ('aapl','AAPL'),
+        ('tsla', 'TSLA'),
+        ('nflx','NFLX'),
+        ('msft','MSFT'),
+    ]
+
+    ORDER_CHOICES = [
+        ('BUY', 'Buy'),
+        ('SELL', 'Sell')
+    ]
+    symbol = models.CharField(max_length=6, choices=(SYMBOL_CHOICES), default='AAPL')
+    order = models.CharField(max_length=6, choices=(ORDER_CHOICES), default='Buy')
+    volume = models.DecimalField(max_digits=10, decimal_places=2, default=0.01)
+    price = models.FloatField(default=0)
 
     
    

@@ -202,7 +202,7 @@ def sell_stock(ticker, volume, price):
             price = price
         )
     
-    return f"Successfully sold {volume} shares of {ticker}."
+    return f"Successfully sold {volume} shares of {ticker} at ${price}."
 
 
 

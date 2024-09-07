@@ -52,20 +52,21 @@
                 </tbody>
             
             </table>
+
+          
+            <form method="post" class="trader-orders">
+                <h1>Orders</h1>
+                {% csrf_token %}
+                {{trader.as_p}}
+                <button type="submit">Submit</button>
+            </form>
+                
+           
+            
         </div>
 
         <div id="trade-view">
-            <div class="trade-btn">
-            
-                {% csrf_token %}
-                
-                <input type="number"  name="volume" value="0.01" placeholder="shares amount" step="0.01" min="0.01" max="100"/>
-                
-                <div>
-                    <button class="buy" onclick="doThis()">Buy</button>
-                    <button class="sell">Sell</button>
-                </div>
-            </div>
+           
             <div id="viewCharts">
             
                 <div id="aaplChart" class="ticker-content active">
@@ -78,7 +79,7 @@
                     </div>
                 </div>
 
-<!--
+
                 <div id="tslaChart" class="ticker-content">
                     <div class="chart-price">
                         <h1>TESLA, inc.</h1>
@@ -108,14 +109,14 @@
                         {{nflx|safe}}
                     </div>
                 </div>
--->
+
 
             </div>
         </div>
         
     </div>
 
-    <!--
+   <!--
         <h2>Add Funds</h2>
         <form method="post">
           {% csrf_token %}
@@ -129,45 +130,35 @@
             <button type="submit">reset</button>
         </form>   
 
-       <form method="post">
-            <h1>Buy a stock</h1>
-            {% csrf_token %}
-            {{ buy_form.as_p }}
-            <button type="submit">Buy</button>
-        </form> 
--->
+    -->
     <div id="portfolio">
-        <div>{{sell_res}}</div>
-        <table class="port">
-            <thead>
-                <tr>
-                    <th>Symbol</th>
-                    <th>Time</th>
-                    <th>Transaction Type</th>
-                    <th>Bought Price</th>
-                    <th>Volume</th>
-                    <th>Current Price</th>
-                    <th>Profit</th>
-                </tr>
-            </thead>
+        <h2>Portfolio</h2>
+                <table class="port">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Symbol</th>
+                            <th>Volume</th>
+                            <th>Price</th>
+                            <th>Profit</th>
+                        </tr>
+                    </thead>
 
-            <tbody>
+                    <tbody>
+                    {% for item in port %}
+                        <tr>
+                            <th>{{item.stock.name}}</th>
+                            <th>{{item.stock.symbol}}</th>
+                            <th>{{item.volume}}</th>
+                            <th>{{item.price}}</th>
+                            <th>{{item.profit}}</th>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
                 
-            {% for item in trans %}
-                <tr>
-                    
-                    <th>{{item.stock.symbol}}</th>
-                    <th>{{item.date}}</th>
-                    <th>{{item.transaction_type}}</th>
-                    <th>{{item.price}}</th>
-                    <th>{{item.volume}}</th>
-                    <th>Ticker Price</th>
-                    <th>{{item.portfolio.profit}}</th>
-                   
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+       
     </div>
 
 </div>

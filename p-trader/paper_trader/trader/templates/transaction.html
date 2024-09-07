@@ -1,0 +1,38 @@
+{% extends 'master_user_dash.html' %}
+{% block title %}Transactions{% endblock %}
+
+{% block content %}
+<div>
+    <table class="transaction">
+        <thead>
+            <tr>
+                <th>Symbol</th>
+                <th>Time</th>
+                <th>Transaction Type</th>
+                <th>Bought Price</th>
+                <th>Volume</th>
+                <th>Current Price</th>
+                <th>Profit</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            
+        {% for item in trans %}
+            <tr>
+                
+                <th>{{item.stock.symbol}}</th>
+                <th>{{item.date}}</th>
+                <th>{{item.transaction_type}}</th>
+                <th>{{item.price}}</th>
+                <th>{{item.volume}}</th>
+                <th>Ticker Price</th>
+                <th>{{item.portfolio.profit}}</th>
+               
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
