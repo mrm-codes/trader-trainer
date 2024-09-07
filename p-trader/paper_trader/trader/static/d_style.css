@@ -12,6 +12,7 @@
 
 .user-navbar{
    background-color: #000000;
+   color: #eee;
    padding-top: 1rem;
    display: flex;
    flex-direction: row;
@@ -20,15 +21,28 @@
    overflow: hidden;
 }
 
-.app-tools{
+.app-tools, .user-data{
     background-color: inherit;
     display: flex;
     flex-direction: row;
     align-items: flex-end;
+   
     margin: 0 .25rem;
     list-style: none;
-    width: 70%;
+    width: 50%;
 }
+
+.user-data p {
+margin: 0;
+padding: 0;
+}
+
+.user-data p span.balance{
+    color: #3889da;
+    font-weight: 700;
+    font-size: 1.25rem;
+}
+
 .app-tools li, .user-profile li{
     color: #eee;
     background-color: #000000;
@@ -48,13 +62,14 @@
     width: 30%;
 }
 
-.user-profile li span, .user-profile li i{
-    font-weight: 700;
+.user-profile li, .user-profile li a{
+    font-weight: 500;
     background-color: #000000;
     color: #eee;
 }
 
-.user-profile li i:hover{color: #d34d0f;}
+.user-profile li a:hover{color: #d30f0f;
+text-decoration: none;}
 
 /*----------------dropdown settings-------------*/
 
@@ -113,6 +128,11 @@ th, td{
     justify-content: safe;
    
 }
+.notifications{
+    position: absolute;
+    left: 22rem;
+    color:#41ad89
+}
 
 div#trade-view .trade-btn{
     display: flex;
@@ -122,7 +142,7 @@ div#trade-view .trade-btn{
     width: 30%;
     border: none;
     background: none;
-    position: absolute;
+    position:absolute;
     top: 4.5rem;
     left: 45rem;
    
@@ -179,7 +199,7 @@ span.ticker{
 div.chart-price{
     display: flex;
     justify-content: space-between;
-    margin: 0 .57em;
+    margin: 0 .5rem;
     flex-wrap: nowrap;
     align-content: center;
     align-items: flex-end;
@@ -198,4 +218,24 @@ div.chart-price h1, div.chart-price h2{
 
 /*Charts*/
 
+/*Tables*/
+table.port{
+    background-color: #222;
+    color: #eee;
+    width: 100%;
+    height: auto;
+    text-align: left;
 
+}
+
+table.port thead{
+    color: #004181;
+    background-color: #99ceff;
+    border-bottom: 1px solid #a9d0f5;
+}
+
+table.port tbody{
+    background-color: #f2f2f2;
+    color: #000000;
+
+}

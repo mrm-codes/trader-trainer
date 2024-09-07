@@ -1,12 +1,12 @@
 from django.contrib import admin
-from .models import Portfolio
+from .models import Account
 from django.apps import AppConfig
 
 # Register your models here.
 class TraderAdmin(admin.ModelAdmin):
     list_display = ('user', 'balance')
 
-admin.site.register(Portfolio, TraderAdmin)
+admin.site.register(Account, TraderAdmin)
 
 
 class TradeConfig(AppConfig):

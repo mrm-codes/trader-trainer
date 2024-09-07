@@ -1,6 +1,5 @@
-//Chart Navigation
- //default condition
- 
+
+
 document.getElementById('aaplChart').classList.add('active');
 
 function showTicker(id){
@@ -39,8 +38,9 @@ function showTicker(id){
 }
 
 
-//clear section
 
-function clearView(){
-    document.getElementById('viewCharts').innerHTML = '';
-}
+
+
+
+
+

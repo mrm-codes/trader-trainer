@@ -1,6 +1,9 @@
-from typing import Any
+from typing import Any, Mapping
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
+from django.forms.renderers import BaseRenderer
+from django.forms.utils import ErrorList
+from .models import Account, Portfolio, Transaction
 from django import forms
 
 class RegisterUserForm(UserCreationForm):
@@ -27,3 +30,34 @@ class LoginUserForm(AuthenticationForm):
         super(AuthenticationForm, self).__init__( *args, **kwargs)
         self.fields['username'].widget.attrs['class'] = 'form-control'
         self.fields['password'].widget.attrs['class'] = 'form-control'
+
+class DepositForm(forms.Form):
+    amount = forms.DecimalField(max_digits=10, decimal_places=2)
+
+    class Meta:
+        model = Account
+        fields = ['amount']
+    
+    def __init__(self, *args, **kwargs):
+        intance = kwargs.get('instance')
+        super(DepositForm, self).__init__(*args, kwargs)
+
+
+class ResetForm(forms.Form):
+    class Meta:
+        model = Account
+    
+    def __init__(self, *args, **kwargs):
+        intance = kwargs.get('instance')
+        super(ResetForm, self).__init__(*args, kwargs)
+    
+class TransactionForm(forms.Form):
+    class Meta:
+        model = Portfolio
+        fields = ['volume']
+
+    def __init__(self, *args, **kwargs):
+        intance = kwargs.get('instance')
+        super(TransactionForm, self).__init__(*args, kwargs)
+        
+    volume = forms.DecimalField(decimal_places=2, min_value=0.01, max_digits=10, required=True)
