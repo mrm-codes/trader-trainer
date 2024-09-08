@@ -59,10 +59,10 @@ class Transaction(models.Model):
 
 class Trade(models.Model):
     SYMBOL_CHOICES = [
-        ('aapl','AAPL'),
-        ('tsla', 'TSLA'),
-        ('nflx','NFLX'),
-        ('msft','MSFT'),
+        ('AAPL','AAPL'),
+        ('TSLA', 'TSLA'),
+        ('NFLX','NFLX'),
+        ('MSFT','MSFT'),
     ]
 
     ORDER_CHOICES = [
@@ -72,7 +72,7 @@ class Trade(models.Model):
     symbol = models.CharField(max_length=6, choices=(SYMBOL_CHOICES), default='AAPL')
     order = models.CharField(max_length=6, choices=(ORDER_CHOICES), default='Buy')
     volume = models.DecimalField(max_digits=10, decimal_places=2, default=0.01)
-    price = models.FloatField(default=0)
+    
 
     
    

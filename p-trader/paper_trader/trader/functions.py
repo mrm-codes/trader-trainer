@@ -99,11 +99,11 @@ def stock_data(ticker):
         else:
             print(message)
        
-        return  {'ticker': 'ticker',
-                'bid': 'bid',
-                'ask': 'ask',
-                'price': 'price',
-                'daily_change': 'daily_change',
+        return  {'ticker': ticker,
+                'bid': bid,
+                'ask': ask,
+                'price': price,
+                'daily_change': daily_change,
                 }
 
 def chart(ticker):
@@ -129,7 +129,7 @@ def chart(ticker):
         xaxis_title='Date',
         yaxis_title='Price (USD)',
         height=600,  # Set height
-        width=1200,  # Set width
+        width=1100,  # Set width
         autosize=True,
         
         margin=dict(l=20, r=20, t=40, b=40))
@@ -148,12 +148,16 @@ def buy_stock(ticker, volume, price):
     portfolio, created = Portfolio.objects.get_or_create(stock=stock, defaults={'volume': 0, 'price': 0})
 
     with transaction.atomic():
-        total_cost = Decimal(volume*price)
+        total_cost = Decimal(volume)*Decimal(price)
         total_volume = Decimal(portfolio.volume) + Decimal(volume)
         avg_price = (Decimal(portfolio.volume*portfolio.price) + Decimal(total_cost))/Decimal(total_volume)
+        current_price = round((yf.Ticker(ticker).history(period='1d', interval='1m ')['Close'].iloc[-1]),2)
+        live_profit = (Decimal(portfolio.price) - Decimal(current_price))*Decimal(volume)
 
+        portfolio.profit = live_profit
         portfolio.volume = total_volume
         portfolio.price = avg_price
+        
         portfolio.save()
 
         Transaction.objects.create(
@@ -185,13 +189,16 @@ def sell_stock(ticker, volume, price):
     with transaction.atomic():
         total_revenue = Decimal(volume)*Decimal(price)
         new_volume = Decimal(portfolio.volume) - Decimal(volume)
+        new_profit = (Decimal(price) - Decimal(portfolio.price))*Decimal(volume)
 
         if new_volume == 0:
+            
             portfolio.delete()
             message = f'You sold all {ticker} shares'
             return message
         else:
             portfolio.volume = new_volume
+            portfolio.profit = new_profit
             portfolio.save()
 
         Transaction.objects.create(

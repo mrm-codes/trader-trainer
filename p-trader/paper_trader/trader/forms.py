@@ -6,6 +6,7 @@ from django.forms.utils import ErrorList
 from .models import Account, Portfolio, Transaction, Trade
 from django import forms
 
+
 class RegisterUserForm(UserCreationForm):
     first_name = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class': 'form-control'}))
     last_name = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class': 'form-control'}))
@@ -55,7 +56,7 @@ class TransactionForm(forms.ModelForm):
     
     class Meta:
         model = Trade
-        fields = ['symbol', 'order', 'volume', 'price']
+        fields = ['symbol', 'order', 'volume']
 
     def __init__(self, *args, **kwargs):
         intance = kwargs.get('instance')

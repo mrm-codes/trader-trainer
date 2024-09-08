@@ -21,23 +21,45 @@
 <body>
     <div class="user-navbar">
         <div class="app-tools">
-            <li>Menu</li>
-            <li>Objects</li>
-            <li>Indicators</li>
-            <li>Time Frames</li>
+            <li class="disabled" aria-disabled="true">Menu</li>
+            <li class="disabled" aria-disabled="true">Objects</li>
+            <li class="disabled" aria-disabled="true">Indicators</li>
+            <li class="disabled" aria-disabled="true">Time Frames</li>
         </div>
         <div class="user-data">
             <p>Welcome Mr(s) <strong>{{user.last_name}}</strong>, your current balance is: <span class="balance">${{balance}}</span></p>
         </div>
 
         <ul class="user-profile">
-            <li>Profile</li>
+            <li onclick="settings()"><i class="fa-solid fa-gear"></i> Settings</li>
             <li>
                 <a href="{% url 'login_user' %}">
                     <i class="fa-solid fa-power-off"></i> Logout
                 </a> 
             </li>
         </ul>
+    </div>
+    <div id="settings" class="set-off">
+        <span id="closeIcon" onclick="closeBtn()" >
+            <i class="fa-solid fa-square-xmark"></i>
+        </span>
+        <div class="info-details">
+            <h2>Settings</h2>
+            <p>Name: <span class="info">{{user}} {{user.last_name}}</span></p>
+            <p>Email: <span class="info">{{user.email}}</span></p>
+            <p>Balance: <span class="info">${{balance}}</span></p>
+            <form method="post" class="add-funds">
+                {% csrf_token %}
+                {{ deposit.as_p }}
+                <button type="submit">Add Funds</button>
+            </form>
+            <form method="post" class="reset-account">
+                {% csrf_token %}
+                {{ reset.as_p }}
+                <button type="submit">Reset account</button>
+            </form>   
+            
+        </div>
     </div>
 {% block content %}
 

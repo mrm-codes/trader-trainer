@@ -4,6 +4,7 @@
 {% block title %} {{user}} Dashboard {% endblock %}
 
 {% block content %}
+
 <div class="dash-container">
     <div class="notifications">
         <!--<span class="message">Lorem ipsum dolor sit amet consectetur adipisicing elit.</span> -->
@@ -58,10 +59,12 @@
                 <h1>Orders</h1>
                 {% csrf_token %}
                 {{trader.as_p}}
+    
                 <button type="submit">Submit</button>
             </form>
                 
-           
+            
+     
             
         </div>
 
@@ -71,8 +74,8 @@
             
                 <div id="aaplChart" class="ticker-content active">
                     <div class="chart-price">
-                        <h1>APPL, inc.</h1>
-                        <!--<h3>Price:<span> {{AAPL.price}}</span></h3>-->
+                        <h1>AAPL, inc.</h1>
+                        <h2>Price:<span> {{AAPL.price}}</span></23>
                     </div>
                     <div class="chart">
                         {{apple|safe}}
@@ -84,6 +87,7 @@
                     <div class="chart-price">
                         <h1>TESLA, inc.</h1>
                         <h2>Price:<span> {{TSLA.price}}</span></h2>
+                        
                     </div>
                     <div class="chart">
                         {{tesla|safe}}
@@ -110,27 +114,23 @@
                     </div>
                 </div>
 
+                <div id="btcChart" class="ticker-content">
+                    <div class="chart-price">
+                        <h1>BTC-USD, inc.</h1>
+                        <h2>Price:<span> {{BTCUSD.price}}</span></h2>
+                    </div>
+                    <div class="chart">
+                        {{btc_chart|safe}}
+                    </div>
+                </div>
+
 
             </div>
         </div>
         
     </div>
 
-   <!--
-        <h2>Add Funds</h2>
-        <form method="post">
-          {% csrf_token %}
-          {{ deposit.as_p }}
-          <button type="submit">Add Funds</button>
-        </form>
-
-        <form method="post">
-            {% csrf_token %}
-            {{ reset.as_p }}
-            <button type="submit">reset</button>
-        </form>   
-
-    -->
+   
     <div id="portfolio">
         <h2>Portfolio</h2>
                 <table class="port">
@@ -162,5 +162,7 @@
     </div>
 
 </div>
+
+
 
 {% endblock %}
