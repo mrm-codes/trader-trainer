@@ -85,11 +85,13 @@ def user_dash(request):
         deposit = DepositForm(request.POST, prefix='deposit')
         reset = ResetForm(request.POST, prefix='reset')
         trade_form = TransactionForm(request.POST, prefix='trade_form')
+        
 
         
         
         if deposit.is_valid():
             amount = deposit.cleaned_data['amount']
+            
             user_balance, created = Account.objects.get_or_create(user=request.user)
             user_balance.balance += amount
             user_balance.save()
@@ -144,9 +146,20 @@ def user_dash(request):
 
 
         elif reset.is_valid():
+            
             user_balance, created = Account.objects.get_or_create(user=request.user)
-            user_balance.balance = initial_balance
+
+            portfolio = Portfolio.objects.all()
+            portfolio.delete()
+                
+
+            user_balance.balance = initial_balance # Reset Balance
             user_balance.save()
+            
+            
+            
+
+           
 
     else:
         deposit = DepositForm()
@@ -179,7 +192,7 @@ def user_dash(request):
         context = {
             'balance': balance,
             'deposit': deposit,
-            #'reset': reset,
+           
             
             'trader': trade_form,     
             'port': myportfolio,
@@ -209,7 +222,9 @@ def user_dash(request):
 @login_required
 def transactions(request):
     mytransactions = Transaction.objects.all()
+    user = user_account(request)
+    balance = user.balance
 
-    return render(request, 'transaction.html' ,{'trans': mytransactions})
+    return render(request, 'transaction.html' ,{'trans': mytransactions, 'balance':balance,})
 
 

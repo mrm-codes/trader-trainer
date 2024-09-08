@@ -5,8 +5,6 @@
     padding: 0;
     box-sizing: border-box;
     font-family: 'Barlow' ,'Roboto condensed';
-    
-    
 }
 
 
@@ -372,3 +370,16 @@ form.reset-account button{
 #settings.set-off{
     display: none;
 }
+
+#go-back {
+    
+    background-color: #05223f;
+    color: #f0f0f0;
+    padding: 0 1rem;
+    cursor: pointer;
+    position: absolute;
+    top: 4rem;
+    right: 1rem;
+}
+
+#go-back a{text-decoration: none;}

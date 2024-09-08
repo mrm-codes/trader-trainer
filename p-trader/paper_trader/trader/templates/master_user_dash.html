@@ -25,6 +25,7 @@
             <li class="disabled" aria-disabled="true">Objects</li>
             <li class="disabled" aria-disabled="true">Indicators</li>
             <li class="disabled" aria-disabled="true">Time Frames</li>
+            
         </div>
         <div class="user-data">
             <p>Welcome Mr(s) <strong>{{user.last_name}}</strong>, your current balance is: <span class="balance">${{balance}}</span></p>
@@ -48,6 +49,7 @@
             <p>Name: <span class="info">{{user}} {{user.last_name}}</span></p>
             <p>Email: <span class="info">{{user.email}}</span></p>
             <p>Balance: <span class="info">${{balance}}</span></p>
+            <p>Transactions <span><a href="{% url 'transactions' %}">Click here</a></span></p>
             <form method="post" class="add-funds">
                 {% csrf_token %}
                 {{ deposit.as_p }}

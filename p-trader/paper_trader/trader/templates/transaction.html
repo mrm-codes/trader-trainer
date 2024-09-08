@@ -2,6 +2,7 @@
 {% block title %}Transactions{% endblock %}
 
 {% block content %}
+<button type="button" id="go-back"><a href="{% url 'user_dash' %}">Go back</a></button>
 <div>
     <table class="transaction">
         <thead>
@@ -26,7 +27,6 @@
                 <th>{{item.transaction_type}}</th>
                 <th>{{item.price}}</th>
                 <th>{{item.volume}}</th>
-                <th>Ticker Price</th>
                 <th>{{item.portfolio.profit}}</th>
                
             </tr>
