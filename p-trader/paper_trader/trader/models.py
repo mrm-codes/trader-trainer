@@ -63,6 +63,11 @@ class Trade(models.Model):
         ('TSLA', 'TSLA'),
         ('NFLX','NFLX'),
         ('MSFT','MSFT'),
+        ('NVDA', 'NVDA'),
+        ('AMZN', 'AMZN'),
+        ('META', 'META'),
+        ('BAC', 'BAC'),
+
     ]
 
     ORDER_CHOICES = [

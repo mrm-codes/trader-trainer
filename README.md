@@ -22,7 +22,7 @@ All the app wireframes and system design can be found in this link: https://driv
 
 
 ## How to use
-1. Get informed about the Application on home and about page
+1. Get informed about the Application on home and about page: 
 2. Register an account
     - When registering, fill all the required fields. For this version no real email is necessary!
     - You don't need to worry about your data, it is safe. If you have doubts you can use fake data.

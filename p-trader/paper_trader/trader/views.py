@@ -77,8 +77,7 @@ def user_dash(request):
     initial_balance = 10000
     min_balance = 0
     transaction_fee = 0.005
-    #trade_form = trade(request)
-    #Applying functions
+    
     
 
     if request.method == "POST":
@@ -117,13 +116,25 @@ def user_dash(request):
                     stock = Stock.objects.get(symbol=ticker)
                 except Stock.DoesNotExist:
                     if ticker == 'TSLA':
-                        stock = Stock.objects.create(symbol=ticker, name='Tesla') 
+                        stock = Stock.objects.create(symbol=ticker, name='Tesla Inc') 
                         stock.save() # save stock
                     elif ticker == 'NFLX':
-                        stock = Stock.objects.create(symbol=ticker, name='Netflix') 
+                        stock = Stock.objects.create(symbol=ticker, name='Netflix Inc') 
                         stock.save() # save stock
                     elif ticker == 'MSFT':
-                        stock = Stock.objects.create(symbol=ticker, name='Microsoft') 
+                        stock = Stock.objects.create(symbol=ticker, name='Microsoft Corporation') 
+                        stock.save() # save stock
+                    elif ticker == 'NVDA':
+                        stock = Stock.objects.create(symbol=ticker, name='NVIDIA Corporation') 
+                        stock.save() # save stock
+                    elif ticker == 'AMZN':
+                        stock = Stock.objects.create(symbol=ticker, name='Amazon Inc') 
+                        stock.save() # save stock
+                    elif ticker == 'META':
+                        stock = Stock.objects.create(symbol=ticker, name='Meta Platforms Inc') 
+                        stock.save() # save stock
+                    elif ticker == 'BAC':
+                        stock = Stock.objects.create(symbol=ticker, name='Bank of America Corp') 
                         stock.save() # save stock
                     else:
                         'Stock does not exist'
@@ -169,22 +180,26 @@ def user_dash(request):
         
 
     while True:
-    #-----------------charting------------------
+    #-----------------stock data------------------
         aapl = stock_data('AAPL')
         tsla = stock_data('TSLA')
         nflx = stock_data('NFLX')
         msft = stock_data('MSFT')
-        #btc_usd = stock_data('BTCUSD')
-
-
-        #----------------------------------
+        nvda = stock_data('NVDA')
+        amzn = stock_data('AMZN')
+        meta = stock_data('META')
+        bac = stock_data('BAC')
+        #-----------stock chart-----------------------
         aapl_chart = chart('AAPL')
         tsla_chart = chart('TSLA')
         nflx_chart = chart('NFLX')
         msft_chart = chart('MSFT')
-        #btcusd_chart = chart('BTCUSD')
+        nvda_chart = chart('NVDA')
+        amzn_chart = chart('AMZN')
+        meta_chart = chart('META')
+        bac_chart = chart('BAC')
         
-        time.sleep(10) # 60s interval until fetches another data
+        time.sleep(10) # 10s interval until fetches another data
 
         
 
@@ -192,25 +207,28 @@ def user_dash(request):
         context = {
             'balance': balance,
             'deposit': deposit,
-           
-            
             'trader': trade_form,     
             'port': myportfolio,
             
             # stock data
             'AAPL': aapl,
-            #'BTCUSD': btc_usd,
             'TSLA': tsla,
             'NFLX': nflx,
             'MSFT': msft,
+            'NVDA': nvda,
+            'AMZN': amzn,
+            'META': meta,
+            'BAC': bac,
             #chart display
             'apple': aapl_chart,
             'tesla': tsla_chart,
             'msft': msft_chart,
             'nflx': nflx_chart,
+            'nvda':nvda_chart,
+            'amzn':amzn_chart,
+            'meta': meta_chart,
+            'bac': bac_chart,
         
-            #'btc_chart': btcusd_chart,
-            #'msg': message
         }
 
         
@@ -222,9 +240,7 @@ def user_dash(request):
 @login_required
 def transactions(request):
     mytransactions = Transaction.objects.all()
-    user = user_account(request)
-    balance = user.balance
-
-    return render(request, 'transaction.html' ,{'trans': mytransactions, 'balance':balance,})
+    
+    return render(request, 'transaction.html' ,{'trans': mytransactions,})
 
 

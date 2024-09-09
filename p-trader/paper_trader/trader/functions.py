@@ -14,55 +14,8 @@ import yfinance as yf
 import datetime
 import plotly.graph_objs as go
 from django.http import JsonResponse
+import time
 
-
-#------------------------------------
-#Adding stocks to DB
-'''stock_info = Stock.objects.create(symbol='AAPL', name='Apple')
-stock_info.save()'''
-
-
-#-----------------------------------
-
-'''
-Account
-deposit, reset
-----------------------------
-
-Trading functions
-buy, sell, close, 
-
-Data Overview
-Stock(name, symbol, bid, ask, daily_change, price_per_share)
-
-Data Visualzation
-Stock(chart, chart name, current price)
-
-Portfolio
-Time, symbol, transation_type, volume, open_price, current_price, profit
-
-Transaction
-Time, symbol, transation_type, volume, open_price, close_price, profit
-'''
-#---Account functions done with the model------#
-#BUY FUNCTION
-# When you buy your balance does't change, creates a portfolio, where price is open_price and profit = (1-transaction_fee)*price*volume
-
-#checkin item in DB
-'''apple = Transaction.objects.get(id=1).portfolio.stock.symbol  
-print(apple)'''
-
-#checking DB
-''']
-acc = apps.get_model('trader', 'Stock')
-field_name_1 = [field.name for field in Stock._meta.get_fields()]
-print(field_name_1)
-bcc = apps.get_model('trader', 'Portfolio')
-field_name_2 = [field.name for field in Portfolio._meta.get_fields()]
-
-ccc = apps.get_model('trader', 'Transaction')
-field_nam_3 = [field.name for field in Transaction._meta.get_fields()]
-'''
 
 @login_required
 #User account
@@ -71,6 +24,7 @@ def user_account(request):
     return account
 
 #Trading info
+
 def stock_data(ticker):
         stock = yf.Ticker(ticker)
         data_history = stock.history(period='1d', interval='1m ')
@@ -108,7 +62,7 @@ def stock_data(ticker):
 
 def chart(ticker):
     start_period = '2017-01-01'
-    today = '2024-08-30'
+    today = datetime.date.today()
     end_period = today
     interval = '1d'
 
@@ -151,24 +105,27 @@ def buy_stock(ticker, volume, price):
         total_cost = Decimal(volume)*Decimal(price)
         total_volume = Decimal(portfolio.volume) + Decimal(volume)
         avg_price = (Decimal(portfolio.volume*portfolio.price) + Decimal(total_cost))/Decimal(total_volume)
-        current_price = round((yf.Ticker(ticker).history(period='1d', interval='1m ')['Close'].iloc[-1]),2)
-        live_profit = (Decimal(portfolio.price) - Decimal(current_price))*Decimal(volume)
-
-        portfolio.profit = live_profit
-        portfolio.volume = total_volume
-        portfolio.price = avg_price
         
-        portfolio.save()
 
-        Transaction.objects.create(
-            portfolio=portfolio,
-            stock=stock,
-            volume=volume,
-            price=price,
-            transaction_type = 'BUY',
-            
-        )
-    return f'Successfully bought {volume} shares of {ticker} at ${price}.'
+        while True:
+            current_price = round((yf.Ticker(ticker).history(period='1d', interval='1m ')['Close'].iloc[-1]),2)
+            live_profit = (Decimal(current_price) - Decimal(portfolio.price))*Decimal(volume)
+            time.sleep(10)
+
+            portfolio.volume = total_volume
+            portfolio.price = avg_price
+            portfolio.profit = live_profit
+            portfolio.save()
+            Transaction.objects.create(
+                portfolio=portfolio,
+                stock=stock,
+                volume=volume,
+                price=price,
+                transaction_type = 'BUY',
+                
+            )
+            print(f'port_price: {portfolio.price} \n avg_price: {avg_price} \n current_prce: {current_price}')
+            return f'Successfully bought {volume} shares of {ticker} at ${price}.'
 
 
 def sell_stock(ticker, volume, price):
