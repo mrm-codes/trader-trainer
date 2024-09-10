@@ -58,3 +58,4 @@ For the future we intend to add features like:
 4. Email authentication
 5. User email support
 6. Add cryptocurrencies, commodities and futures
+7. Improve system performance
