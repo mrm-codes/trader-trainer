@@ -29,13 +29,11 @@ def stock_data(ticker):
         stock = yf.Ticker(ticker)
         data_history = stock.history(period='1d', interval='1m ')
         message = 'No data to display'
+        current_price = stock.info.get('currentPrice')
+        price = round(current_price, 2)
         if not data_history.empty:
             # Get the opening price (first price of the day)
             opening_price = data_history['Open'][0]
-           
-            # Get the current or last close price (latest price of the day)
-            current_price = data_history['Close'].iloc[-1]  
-            price = round(current_price, 2)
            
             #getting the current bid
             on_price = stock.info.get('bid', 'No data available')
@@ -48,7 +46,7 @@ def stock_data(ticker):
 
 
             # Calculate daily change percentage
-            daily_change_percentage = ((current_price - opening_price) / opening_price) * 100
+            daily_change_percentage = ((price - opening_price) / opening_price) * 100
             daily_change = round(daily_change_percentage, 2)
         else:
             print(message)
@@ -91,9 +89,15 @@ def chart(ticker):
     ticker_chart = fig.to_html(full_html=False)
     return ticker_chart
 
+#current price
 
+def live_price(ticker):
+    stock_price = yf.Ticker(ticker).info.get('currentPrice')
+    price = round(stock_price, 2)
+    return price
 #Trading operations 
 def buy_stock(ticker, volume, price):
+    price = live_price(ticker)
     try:
         stock = Stock.objects.get(symbol = ticker)
     except Stock.DoesNotExist:
@@ -105,30 +109,32 @@ def buy_stock(ticker, volume, price):
         total_cost = Decimal(volume)*Decimal(price)
         total_volume = Decimal(portfolio.volume) + Decimal(volume)
         avg_price = (Decimal(portfolio.volume*portfolio.price) + Decimal(total_cost))/Decimal(total_volume)
-        
 
-        while True:
-            current_price = round((yf.Ticker(ticker).history(period='1d', interval='1m ')['Close'].iloc[-1]),2)
-            live_profit = (Decimal(current_price) - Decimal(portfolio.price))*Decimal(volume)
-            time.sleep(10)
+        initial_profit = (Decimal(price) - Decimal(portfolio.price))*Decimal(portfolio.volume)
+          
+          
 
-            portfolio.volume = total_volume
-            portfolio.price = avg_price
-            portfolio.profit = live_profit
-            portfolio.save()
-            Transaction.objects.create(
-                portfolio=portfolio,
-                stock=stock,
-                volume=volume,
-                price=price,
-                transaction_type = 'BUY',
-                
-            )
-            print(f'port_price: {portfolio.price} \n avg_price: {avg_price} \n current_prce: {current_price}')
-            return f'Successfully bought {volume} shares of {ticker} at ${price}.'
+        portfolio.volume = total_volume
+        portfolio.price = avg_price
+        portfolio.profit = initial_profit
+        portfolio.save()
 
+
+        Transaction.objects.create(
+            portfolio=portfolio,
+            stock=stock,
+            volume=volume,
+            price=price,
+            transaction_type = 'BUY',
+            
+        )
+       
+        return f'Successfully bought {volume} shares of {ticker} at ${price}.'
+
+ 
 
 def sell_stock(ticker, volume, price):
+    price = live_price(ticker)
     try:
         stock = Stock.objects.get(symbol=ticker)
     except Stock.DoesNotExist:
@@ -142,20 +148,26 @@ def sell_stock(ticker, volume, price):
     if portfolio.volume < volume:
             return "Not enough stock to sell."
 
-        
+     
     with transaction.atomic():
         total_revenue = Decimal(volume)*Decimal(price)
         new_volume = Decimal(portfolio.volume) - Decimal(volume)
-        new_profit = (Decimal(price) - Decimal(portfolio.price))*Decimal(volume)
+        
+        if volume < portfolio.volume:
+            partial_profit = round(((Decimal(portfolio.price) - Decimal(price))*Decimal(volume)),2)
+            portfolio.profit = partial_profit
+            portfolio.save()
+        if volume == portfolio.volume:
+            total_profit = round(((Decimal(portfolio.price) - Decimal(price))*Decimal(portfolio.volume)),2)
+            portfolio.profit = total_profit
+            portfolio.save()
 
         if new_volume == 0:
-            
             portfolio.delete()
             message = f'You sold all {ticker} shares'
             return message
         else:
             portfolio.volume = new_volume
-            portfolio.profit = new_profit
             portfolio.save()
 
         Transaction.objects.create(

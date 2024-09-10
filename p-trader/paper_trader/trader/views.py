@@ -1,27 +1,12 @@
 from django.shortcuts import render, redirect # type: ignore
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm 
 from django.contrib.auth import login, authenticate # type: ignore
-from django.contrib import messages
-from . forms import RegisterUserForm, LoginUserForm, DepositForm, TransactionForm
-
+from .forms import RegisterUserForm, LoginUserForm, DepositForm, TransactionForm
 #Trading requirements
-import yahoo_fin.stock_info as si
-import yfinance as yf
 import time
-import requests
-from . models import Account, Transaction
-import pandas as pd
-import plotly.graph_objs as go
-from django.http import JsonResponse
-#from plotly.offline import plot
+from .models import Account, Transaction
 from .functions import *
 
-
-
-
-# Create your views here.
-
-#Base pages/routes
+#Static pages/routes
 def base(request):
     return render(request, 'base.html')
 
@@ -59,58 +44,69 @@ def register_user(request):
         form = RegisterUserForm()       
     return render(request, 'registration_form.html', {'form': form,})
 
+#reset account
+@login_required
+def reset_account(request):
+    user_balance, created = Account.objects.get_or_create(user=request.user)
+    
+    
+    if request.method ==  'POST':
+        reset = ResetForm(request.POST, prefix='reset_account')
+        if reset.is_valid():
+            portfolio = Portfolio.objects.all().delete()
+            initial_balance = 100000 # $100,000.00
+            user_balance.balance = initial_balance # Reset Balance
+            user_balance.save()
+            reset = ResetForm()
+            redirect('/user_dash')
+            print('Account reset')
+        else:
+            reset = ResetForm()
+            print('Account not reset')
+    return render(request, 'user_dashboard.html', {'reset': reset,})
 
 #User dashboard
-# Define a Python function
-
-# View function
-
-
 @login_required
 def user_dash(request):
-    #Test view------------------------
-    myportfolio = Portfolio.objects.all()
-    #--------------------------------
-    #User account
-    user = user_account(request)
-    balance = user.balance
-    initial_balance = 10000
-    min_balance = 0
-    transaction_fee = 0.005
-    
-    
 
+    #User account
+    user_balance, created = Account.objects.get_or_create(user=request.user)
+    balance = user_balance.balance
+
+    #updating portfolio
+    myportfolio = Portfolio.objects.all()
+    for asset in myportfolio:
+        asset_symbol = asset.stock.symbol
+        asset_price = asset.price
+        asset_volume = asset.volume
+        asset_current_price = live_price(asset_symbol)
+        asset_profit = (Decimal(asset_current_price) - Decimal(asset_price))*Decimal(asset_volume)
+        new_profit = round(asset_profit,2)
+        asset.profit = new_profit 
+        asset.save()
+        
+    
     if request.method == "POST":
         deposit = DepositForm(request.POST, prefix='deposit')
-        reset = ResetForm(request.POST, prefix='reset')
         trade_form = TransactionForm(request.POST, prefix='trade_form')
-        
 
-        
-        
         if deposit.is_valid():
             amount = deposit.cleaned_data['amount']
-            
-            user_balance, created = Account.objects.get_or_create(user=request.user)
-            user_balance.balance += amount
+            balance += amount
             user_balance.save()
-            message = messages.success(request, f"${amount} has been added to your balance.")
-            
-            return redirect('user_dash')  # Redirect to a profile or dashboard page
+            deposit = DepositForm()
+            print(f'You added ${amount}')
+       
+            #return redirect('user_dash')  # Redirect to a profile or dashboard page
   
         elif trade_form.is_valid():
-            #current_price = 25
-            user_balance, created = Account.objects.get_or_create(user=request.user)
-            balance = user_balance.balance
+
             order = trade_form.cleaned_data['order']
             ticker = trade_form.cleaned_data['symbol']
             volume = trade_form.cleaned_data['volume']
             
-           
-            
             if order == 'BUY':
-                current_price = yf.Ticker(ticker).history(period='1d', interval='1m ')['Close'].iloc[-1]
-                price = round(current_price, 2)
+                price = live_price(ticker)
                 print(f'You are buying {ticker}')
                 try:
                     stock = Stock.objects.get(symbol=ticker)
@@ -145,41 +141,28 @@ def user_dash(request):
                
                 balance = round((Decimal(balance) - (Decimal(price)*Decimal(volume))),2)
                 user_balance.save()
+                trade_form = TransactionForm() # clearing the form
                 print(f'You bought {volume} shares of {ticker} at ${price}') # resport order
             else:
                 print(f'You are selling {ticker}')
-                current_price = yf.Ticker(ticker).history(period='1d', interval='1m ')['Close'].iloc[-1]
-                price = round(current_price, 2)
+                price = round(live_price(ticker), 2)
+                
+                sell_stock(ticker, volume, price)
+                
                 balance = round((Decimal(balance) + (Decimal(price)*Decimal(volume))), 2)
                 user_balance.save()
-                sell_stock(ticker, volume, price)
+                trade_form = TransactionForm()
                 print(f'You sold {volume} shares of {ticker} at ${price}')
 
 
-        elif reset.is_valid():
-            
-            user_balance, created = Account.objects.get_or_create(user=request.user)
-
-            portfolio = Portfolio.objects.all()
-            portfolio.delete()
-                
-
-            user_balance.balance = initial_balance # Reset Balance
-            user_balance.save()
-            
-            
-            
-
-           
-
     else:
         deposit = DepositForm()
-        reset = ResetForm()
         trade_form = TransactionForm()
         print('No order')
         
-
+ 
     while True:
+    #information    
     #-----------------stock data------------------
         aapl = stock_data('AAPL')
         tsla = stock_data('TSLA')
@@ -198,7 +181,7 @@ def user_dash(request):
         amzn_chart = chart('AMZN')
         meta_chart = chart('META')
         bac_chart = chart('BAC')
-        
+ 
         time.sleep(10) # 10s interval until fetches another data
 
         
@@ -228,7 +211,6 @@ def user_dash(request):
             'amzn':amzn_chart,
             'meta': meta_chart,
             'bac': bac_chart,
-        
         }
 
         
