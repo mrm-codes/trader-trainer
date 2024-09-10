@@ -1,16 +1,7 @@
 from typing import Any
 from django.db import models
 from django.contrib.auth.models import User
-import yahoo_fin.stock_info as si
-import yfinance as yf
-import time
-from django.db import migrations
 
-import pandas as pd
-import plotly.graph_objs as go
-from django.http import JsonResponse
-#from plotly.offline import plot
-import datetime
 
 #User_details
 class Account(models.Model):

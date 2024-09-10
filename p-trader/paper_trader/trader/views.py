@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth import login, authenticate # type: ignore
-from .forms import RegisterUserForm, LoginUserForm, DepositForm, TransactionForm
+from .forms import RegisterUserForm, LoginUserForm, DepositForm, TransactionForm, ResetForm
 #Trading requirements
 import time
 from .models import Account, Transaction

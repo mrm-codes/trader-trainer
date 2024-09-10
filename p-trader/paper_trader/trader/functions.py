@@ -1,20 +1,14 @@
 from decimal import Decimal
 from django.db import transaction
 from django.apps import apps
-import yahoo_fin.stock_info
+
 from .models import Account, Stock, Portfolio, Transaction
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect # type: ignore
-from django.http import JsonResponse
-from django.contrib import messages
-from .forms import DepositForm, ResetForm, TransactionForm
-
-import yahoo_fin
 import yfinance as yf
+
 import datetime
 import plotly.graph_objs as go
-from django.http import JsonResponse
-import time
+
 
 
 @login_required
@@ -36,7 +30,7 @@ def stock_data(ticker):
             opening_price = data_history['Open'][0]
            
             #getting the current bid
-            on_price = stock.info.get('bid', 'No data available')
+            on_price = float(stock.info.get('bid', 'No data available'))
             bid = round(on_price, 2)
 
 
