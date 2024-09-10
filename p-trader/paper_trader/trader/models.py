@@ -1,16 +1,7 @@
 from typing import Any
 from django.db import models
 from django.contrib.auth.models import User
-import yahoo_fin.stock_info as si
-import yfinance as yf
-import time
-from django.db import migrations
 
-import pandas as pd
-import plotly.graph_objs as go
-from django.http import JsonResponse
-#from plotly.offline import plot
-import datetime
 
 #User_details
 class Account(models.Model):
@@ -63,6 +54,11 @@ class Trade(models.Model):
         ('TSLA', 'TSLA'),
         ('NFLX','NFLX'),
         ('MSFT','MSFT'),
+        ('NVDA', 'NVDA'),
+        ('AMZN', 'AMZN'),
+        ('META', 'META'),
+        ('BAC', 'BAC'),
+
     ]
 
     ORDER_CHOICES = [
@@ -73,20 +69,3 @@ class Trade(models.Model):
     order = models.CharField(max_length=6, choices=(ORDER_CHOICES), default='Buy')
     volume = models.DecimalField(max_digits=10, decimal_places=2, default=0.01)
     
-
-    
-   
- 
-    
-
-       
-
-
-
-
-
- 
-    
-
-
-
