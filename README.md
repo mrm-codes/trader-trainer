@@ -6,21 +6,23 @@ This software is designed to serve those that what to learn how to trade without
 
 ## About Trader Trainer
 Trader Trainer is a websoffware tha is avsilable in:
-It was entirely design for training purposes and not to make real money
+It was entirely design for training purposes and not to make real money.
+This softwares enables the users to buy and sell stocks with real-time data but fake money. The initial amount will be $10, 000.00 and can be added or reset whenever the user wants. It provides a market, stock and portfolio overview so the user can follow the market and its stocks.
 
 
 ## User Stories
-- As a customer I would like to be able to train my trading skills withou losing real money;
+- As a customer I would like to be able to train my trading skills without losing real money;
 - As user, I would like to buy and sell stocks with real time prices so I know I'm dealing with real data;
-- As a customer i would like to have real-time updates about my porfolio perfomance as the market changes in order to make decisions about my orders;
-- As a client, I would like to reset my account whenever I want and I wand all my transactions records deleted.
+- As a customer i would like to have real-time updates about my portfolio performance as the market changes in order to make decisions about my orders;
+- As a client, I would like to reset my account whenever I want and I want all my transaction records deleted.
+
 
 ## App Wireframes
 All the app wireframes and system design can be found in this link: https://drive.google.com/file/d/1z3J8U5GAOfg7KtmiRaaC8dtjiZQnr8w8/view?usp=sharing
 
 
 ## How to use
-1. Get informed about the Application on home and about page
+1. Get informed about the Application on home and about page: 
 2. Register an account
     - When registering, fill all the required fields. For this version no real email is necessary!
     - You don't need to worry about your data, it is safe. If you have doubts you can use fake data.

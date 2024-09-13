@@ -30,7 +30,7 @@ def stock_data(ticker):
             opening_price = data_history['Open'][0]
            
             #getting the current bid
-            on_price = stock.info.get('bid', 'No data available')
+            on_price = float(stock.info.get('bid', 'No data available'))
             bid = round(on_price, 2)
 
 
@@ -104,8 +104,11 @@ def buy_stock(ticker, volume, price):
         total_volume = Decimal(portfolio.volume) + Decimal(volume)
         avg_price = (Decimal(portfolio.volume*portfolio.price) + Decimal(total_cost))/Decimal(total_volume)
 
+<<<<<<< HEAD
         
 
+=======
+>>>>>>> main
         initial_profit = (Decimal(price) - Decimal(portfolio.price))*Decimal(portfolio.volume)
           
           
