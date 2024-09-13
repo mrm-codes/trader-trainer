@@ -6,9 +6,7 @@
 {% block content %}
 
 <div class="dash-container">
-    <div class="notifications">
-        <!--<span class="message">Lorem ipsum dolor sit amet consectetur adipisicing elit.</span> -->
-    </div>
+   
     <div>
         <div id="market-data">
             <h3>Market Overview</h3>
@@ -50,6 +48,35 @@
                         <td>{{NFLX.ask}}</td>
                         <td>{{NFLX.daily_change}}%</td>
                     </tr>
+
+                    <tr>
+                        <td><span class="ticker" onclick="showTicker('nvdaChart')">{{NVDA.ticker}}</span></td>
+                        <td>{{NVDA.bid}}</td>
+                        <td>{{NVDA.ask}}</td>
+                        <td>{{NVDA.daily_change}}%</td>
+                    </tr>
+
+                    <tr>
+                        <td><span class="ticker" onclick="showTicker('amznChart')">{{AMZN.ticker}}</span></td>
+                        <td>{{AMZN.bid}}</td>
+                        <td>{{AMZN.ask}}</td>
+                        <td>{{AMZN.daily_change}}%</td>
+                    </tr>
+
+                    <tr>
+                        <td><span class="ticker" onclick="showTicker('metaChart')">{{META.ticker}}</span></td>
+                        <td>{{META.bid}}</td>
+                        <td>{{META.ask}}</td>
+                        <td>{{META.daily_change}}%</td>
+                    </tr>
+
+                    <tr>
+                        <td><span class="ticker" onclick="showTicker('bacChart')">{{BAC.ticker}}</span></td>
+                        <td>{{BAC.bid}}</td>
+                        <td>{{BAC.ask}}</td>
+                        <td>{{BAC.daily_change}}%</td>
+                    </tr>
+                   
                 </tbody>
             
             </table>
@@ -60,11 +87,9 @@
                 {% csrf_token %}
                 {{trader.as_p}}
     
-                <button type="submit">Submit</button>
+                <button type="submit" name="trade_form" value="submit">Submit</button>
             </form>
-                
-            
-     
+ 
             
         </div>
 
@@ -114,15 +139,46 @@
                     </div>
                 </div>
 
-                <div id="btcChart" class="ticker-content">
+                <div id="nvdaChart" class="ticker-content">
                     <div class="chart-price">
-                        <h1>BTC-USD, inc.</h1>
-                        <h2>Price:<span> {{BTCUSD.price}}</span></h2>
+                        <h1>NVIDIA, inc.</h1>
+                        <h2>Price:<span> {{NVDA.price}}</span></h2>
                     </div>
                     <div class="chart">
-                        {{btc_chart|safe}}
+                        {{nvda|safe}}
                     </div>
                 </div>
+
+                <div id="amznChart" class="ticker-content">
+                    <div class="chart-price">
+                        <h1>AMAZON, inc.</h1>
+                        <h2>Price:<span> {{AMZN.price}}</span></h2>
+                    </div>
+                    <div class="chart">
+                        {{amzn|safe}}
+                    </div>
+                </div>
+
+                <div id="metaChart" class="ticker-content">
+                    <div class="chart-price">
+                        <h1>META, inc.</h1>
+                        <h2>Price:<span> {{META.price}}</span></h2>
+                    </div>
+                    <div class="chart">
+                        {{meta|safe}}
+                    </div>
+                </div>
+
+                <div id="bacChart" class="ticker-content">
+                    <div class="chart-price">
+                        <h1>BAC, inc.</h1>
+                        <h2>Price:<span> {{BAC.price}}</span></h2>
+                    </div>
+                    <div class="chart">
+                        {{bac|safe}}
+                    </div>
+                </div>
+                
 
 
             </div>

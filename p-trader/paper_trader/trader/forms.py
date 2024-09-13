@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.forms.renderers import BaseRenderer
 from django.forms.utils import ErrorList
-from .models import Account, Portfolio, Transaction, Trade
+from .models import Account, Portfolio, Transaction, Trade, Deposit
 from django import forms
 
 
@@ -32,11 +32,9 @@ class LoginUserForm(AuthenticationForm):
         self.fields['username'].widget.attrs['class'] = 'form-control'
         self.fields['password'].widget.attrs['class'] = 'form-control'
 
-class DepositForm(forms.Form):
-    amount = forms.DecimalField(max_digits=10, decimal_places=2)
-
+class DepositForm(forms.ModelForm):
     class Meta:
-        model = Account
+        model = Deposit
         fields = ['amount']
     
     def __init__(self, *args, **kwargs):

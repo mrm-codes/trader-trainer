@@ -1,68 +1,15 @@
 from decimal import Decimal
 from django.db import transaction
 from django.apps import apps
-import yahoo_fin.stock_info
+
 from .models import Account, Stock, Portfolio, Transaction
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect # type: ignore
-from django.http import JsonResponse
-from django.contrib import messages
-from .forms import DepositForm, ResetForm, TransactionForm
-
-import yahoo_fin
 import yfinance as yf
+
 import datetime
 import plotly.graph_objs as go
-from django.http import JsonResponse
 
 
-#------------------------------------
-#Adding stocks to DB
-'''stock_info = Stock.objects.create(symbol='AAPL', name='Apple')
-stock_info.save()'''
-
-
-#-----------------------------------
-
-'''
-Account
-deposit, reset
-----------------------------
-
-Trading functions
-buy, sell, close, 
-
-Data Overview
-Stock(name, symbol, bid, ask, daily_change, price_per_share)
-
-Data Visualzation
-Stock(chart, chart name, current price)
-
-Portfolio
-Time, symbol, transation_type, volume, open_price, current_price, profit
-
-Transaction
-Time, symbol, transation_type, volume, open_price, close_price, profit
-'''
-#---Account functions done with the model------#
-#BUY FUNCTION
-# When you buy your balance does't change, creates a portfolio, where price is open_price and profit = (1-transaction_fee)*price*volume
-
-#checkin item in DB
-'''apple = Transaction.objects.get(id=1).portfolio.stock.symbol  
-print(apple)'''
-
-#checking DB
-''']
-acc = apps.get_model('trader', 'Stock')
-field_name_1 = [field.name for field in Stock._meta.get_fields()]
-print(field_name_1)
-bcc = apps.get_model('trader', 'Portfolio')
-field_name_2 = [field.name for field in Portfolio._meta.get_fields()]
-
-ccc = apps.get_model('trader', 'Transaction')
-field_nam_3 = [field.name for field in Transaction._meta.get_fields()]
-'''
 
 @login_required
 #User account
@@ -71,17 +18,16 @@ def user_account(request):
     return account
 
 #Trading info
+
 def stock_data(ticker):
         stock = yf.Ticker(ticker)
         data_history = stock.history(period='1d', interval='1m ')
         message = 'No data to display'
+        current_price = stock.info.get('currentPrice')
+        price = round(current_price, 2)
         if not data_history.empty:
             # Get the opening price (first price of the day)
             opening_price = data_history['Open'][0]
-           
-            # Get the current or last close price (latest price of the day)
-            current_price = data_history['Close'].iloc[-1]  
-            price = round(current_price, 2)
            
             #getting the current bid
             on_price = stock.info.get('bid', 'No data available')
@@ -94,7 +40,7 @@ def stock_data(ticker):
 
 
             # Calculate daily change percentage
-            daily_change_percentage = ((current_price - opening_price) / opening_price) * 100
+            daily_change_percentage = ((price - opening_price) / opening_price) * 100
             daily_change = round(daily_change_percentage, 2)
         else:
             print(message)
@@ -108,7 +54,7 @@ def stock_data(ticker):
 
 def chart(ticker):
     start_period = '2017-01-01'
-    today = '2024-08-30'
+    today = datetime.date.today()
     end_period = today
     interval = '1d'
 
@@ -137,9 +83,15 @@ def chart(ticker):
     ticker_chart = fig.to_html(full_html=False)
     return ticker_chart
 
+#current price
 
+def live_price(ticker):
+    stock_price = yf.Ticker(ticker).info.get('currentPrice')
+    price = round(stock_price, 2)
+    return price
 #Trading operations 
 def buy_stock(ticker, volume, price):
+    price = live_price(ticker)
     try:
         stock = Stock.objects.get(symbol = ticker)
     except Stock.DoesNotExist:
@@ -151,14 +103,18 @@ def buy_stock(ticker, volume, price):
         total_cost = Decimal(volume)*Decimal(price)
         total_volume = Decimal(portfolio.volume) + Decimal(volume)
         avg_price = (Decimal(portfolio.volume*portfolio.price) + Decimal(total_cost))/Decimal(total_volume)
-        current_price = round((yf.Ticker(ticker).history(period='1d', interval='1m ')['Close'].iloc[-1]),2)
-        live_profit = (Decimal(portfolio.price) - Decimal(current_price))*Decimal(volume)
 
-        portfolio.profit = live_profit
+        
+
+        initial_profit = (Decimal(price) - Decimal(portfolio.price))*Decimal(portfolio.volume)
+          
+          
+
         portfolio.volume = total_volume
         portfolio.price = avg_price
-        
+        portfolio.profit = initial_profit
         portfolio.save()
+
 
         Transaction.objects.create(
             portfolio=portfolio,
@@ -168,10 +124,13 @@ def buy_stock(ticker, volume, price):
             transaction_type = 'BUY',
             
         )
-    return f'Successfully bought {volume} shares of {ticker} at ${price}.'
+       
+        return f'Successfully bought {volume} shares of {ticker} at ${price}.'
 
+ 
 
 def sell_stock(ticker, volume, price):
+    price = live_price(ticker)
     try:
         stock = Stock.objects.get(symbol=ticker)
     except Stock.DoesNotExist:
@@ -185,20 +144,26 @@ def sell_stock(ticker, volume, price):
     if portfolio.volume < volume:
             return "Not enough stock to sell."
 
-        
+     
     with transaction.atomic():
         total_revenue = Decimal(volume)*Decimal(price)
         new_volume = Decimal(portfolio.volume) - Decimal(volume)
-        new_profit = (Decimal(price) - Decimal(portfolio.price))*Decimal(volume)
+        
+        if volume < portfolio.volume:
+            partial_profit = round(((Decimal(portfolio.price) - Decimal(price))*Decimal(volume)),2)
+            portfolio.profit = partial_profit
+            portfolio.save()
+        if volume == portfolio.volume:
+            total_profit = round(((Decimal(portfolio.price) - Decimal(price))*Decimal(portfolio.volume)),2)
+            portfolio.profit = total_profit
+            portfolio.save()
 
         if new_volume == 0:
-            
             portfolio.delete()
             message = f'You sold all {ticker} shares'
             return message
         else:
             portfolio.volume = new_volume
-            portfolio.profit = new_profit
             portfolio.save()
 
         Transaction.objects.create(
@@ -212,9 +177,16 @@ def sell_stock(ticker, volume, price):
     return f"Successfully sold {volume} shares of {ticker} at ${price}."
 
 
+stocks_list = {
+    'AAPL': 'Apple Inc.',
+    'TSLA': 'Tesla Inc',
+    'NFLX': 'Netflix Inc', 
+    'MSFT': 'Microsoft Corporation', 
+    'NVDA': 'NVIDIA Corporation', 
+    'AMZN': 'Amazon Inc', 
+    'META': 'Meta Platforms Inc', 
+    'BAC': 'Bank of America Corp',
+}
 
 
 
-
-        
-    

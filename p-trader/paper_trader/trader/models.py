@@ -1,16 +1,7 @@
 from typing import Any
 from django.db import models
 from django.contrib.auth.models import User
-import yahoo_fin.stock_info as si
-import yfinance as yf
-import time
-from django.db import migrations
 
-import pandas as pd
-import plotly.graph_objs as go
-from django.http import JsonResponse
-#from plotly.offline import plot
-import datetime
 
 #User_details
 class Account(models.Model):
@@ -23,7 +14,7 @@ class Account(models.Model):
         self.save()
 
     def reset_account(self, amount):
-        self.balance = 1000.00 #default amouont
+        self.balance = 1000.00 #default amount
         self.save()
 
     def __str__(self):
@@ -63,6 +54,11 @@ class Trade(models.Model):
         ('TSLA', 'TSLA'),
         ('NFLX','NFLX'),
         ('MSFT','MSFT'),
+        ('NVDA', 'NVDA'),
+        ('AMZN', 'AMZN'),
+        ('META', 'META'),
+        ('BAC', 'BAC'),
+
     ]
 
     ORDER_CHOICES = [
@@ -72,21 +68,10 @@ class Trade(models.Model):
     symbol = models.CharField(max_length=6, choices=(SYMBOL_CHOICES), default='AAPL')
     order = models.CharField(max_length=6, choices=(ORDER_CHOICES), default='Buy')
     volume = models.DecimalField(max_digits=10, decimal_places=2, default=0.01)
+
+
+class Deposit(models.Model):
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
     
-
-    
-   
- 
-    
-
-       
-
-
-
-
-
- 
-    
-
-
-
+    def __str__(self):
+        return f"You successfully deposited ${self.amount} in your balance account"

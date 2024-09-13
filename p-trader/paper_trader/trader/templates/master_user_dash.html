@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="60"> <!-- Refresh every 60 seconds -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
     {% load static %}
@@ -53,12 +54,13 @@
             <form method="post" class="add-funds">
                 {% csrf_token %}
                 {{ deposit.as_p }}
-                <button type="submit">Add Funds</button>
+                <button type="submit" name="deposit_form" value="submit">Add Funds</button>
             </form>
+           
             <form method="post" class="reset-account">
                 {% csrf_token %}
                 {{ reset.as_p }}
-                <button type="submit">Reset account</button>
+                <button type="submit" name="reset_account" value="submit">Reset account</button>
             </form>   
             
         </div>
