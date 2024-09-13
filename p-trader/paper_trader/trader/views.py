@@ -12,7 +12,7 @@ from .models import Account, Transaction, Deposit
 from .functions import *
 
 #Static pages/routes
-#Static pages/routes
+
 def base(request):
     return render(request, 'base.html')
 
@@ -50,9 +50,12 @@ def register_user(request):
         form = RegisterUserForm()       
     return render(request, 'registration_form.html', {'form': form,})
 
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> 6ce86ce28bc81c09a688f63815058c0921faf181
 #User dashboard
 @login_required
 def user_dash(request):
@@ -161,8 +164,6 @@ def user_dash(request):
     while True:
     #information    
     #-----------------stock data------------------
-    #information    
-    #-----------------stock data------------------
         aapl = stock_data('AAPL')
         tsla = stock_data('TSLA')
         nflx = stock_data('NFLX')
@@ -171,11 +172,7 @@ def user_dash(request):
         amzn = stock_data('AMZN')
         meta = stock_data('META')
         bac = stock_data('BAC')
-        #-----------stock chart-----------------------
-        nvda = stock_data('NVDA')
-        amzn = stock_data('AMZN')
-        meta = stock_data('META')
-        bac = stock_data('BAC')
+        
         #-----------stock chart-----------------------
         aapl_chart = chart('AAPL')
         tsla_chart = chart('TSLA')
@@ -204,10 +201,7 @@ def user_dash(request):
             'AMZN': amzn,
             'META': meta,
             'BAC': bac,
-            'NVDA': nvda,
-            'AMZN': amzn,
-            'META': meta,
-            'BAC': bac,
+            
             #chart display
             'apple': aapl_chart,
             'tesla': tsla_chart,
