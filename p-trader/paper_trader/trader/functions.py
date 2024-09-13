@@ -104,11 +104,7 @@ def buy_stock(ticker, volume, price):
         total_volume = Decimal(portfolio.volume) + Decimal(volume)
         avg_price = (Decimal(portfolio.volume*portfolio.price) + Decimal(total_cost))/Decimal(total_volume)
 
-<<<<<<< HEAD
-        
 
-=======
->>>>>>> main
         initial_profit = (Decimal(price) - Decimal(portfolio.price))*Decimal(portfolio.volume)
           
           

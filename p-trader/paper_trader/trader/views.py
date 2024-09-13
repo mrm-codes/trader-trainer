@@ -1,17 +1,14 @@
 from django.shortcuts import render, redirect # type: ignore
 from django.contrib.auth import login, authenticate # type: ignore
 from .forms import RegisterUserForm, LoginUserForm, DepositForm, TransactionForm, ResetForm
-<<<<<<< HEAD
+
 from django.contrib.auth.decorators import login_required
 
 #Trading requirements
 import time
 from .models import Account, Transaction, Deposit
-=======
-#Trading requirements
-import time
-from .models import Account, Transaction
->>>>>>> main
+
+
 from .functions import *
 
 #Static pages/routes
@@ -52,7 +49,7 @@ def register_user(request):
         form = RegisterUserForm()       
     return render(request, 'registration_form.html', {'form': form,})
 
-<<<<<<< HEAD
+
 #User dashboard
 @login_required
 def user_dash(request):
@@ -144,7 +141,7 @@ def user_dash(request):
         
         elif 'reset_account' in request.POST:
             reset = ResetForm(request.POST)
-            initial_amount = 10000
+            initial_amount = 10000  # $10,000.00 initital balance
             if reset.is_valid():
                 print('Reset form is valid')
                 Portfolio.objects.all().delete()
@@ -157,125 +154,7 @@ def user_dash(request):
     else:
         print('inactive')
 
-=======
-#reset account
-@login_required
-def reset_account(request):
-    user_balance, created = Account.objects.get_or_create(user=request.user)
-    
-    
-    if request.method ==  'POST':
-        reset = ResetForm(request.POST, prefix='reset_account')
-        if reset.is_valid():
-            portfolio = Portfolio.objects.all().delete()
-            initial_balance = 100000 # $100,000.00
-            user_balance.balance = initial_balance # Reset Balance
-            user_balance.save()
-            reset = ResetForm()
-            redirect('/user_dash')
-            print('Account reset')
-        else:
-            reset = ResetForm()
-            print('Account not reset')
-    return render(request, 'user_dashboard.html', {'reset': reset,})
 
-#User dashboard
-@login_required
-def user_dash(request):
-
-    #User account
-    user_balance, created = Account.objects.get_or_create(user=request.user)
-    balance = user_balance.balance
-
-    #updating portfolio
-    myportfolio = Portfolio.objects.all()
-    for asset in myportfolio:
-        asset_symbol = asset.stock.symbol
-        asset_price = asset.price
-        asset_volume = asset.volume
-        asset_current_price = live_price(asset_symbol)
-        asset_profit = (Decimal(asset_current_price) - Decimal(asset_price))*Decimal(asset_volume)
-        new_profit = round(asset_profit,2)
-        asset.profit = new_profit 
-        asset.save()
-        
-    
-    if request.method == "POST":
-        deposit = DepositForm(request.POST, prefix='deposit')
-        trade_form = TransactionForm(request.POST, prefix='trade_form')
-
-        if deposit.is_valid():
-            amount = deposit.cleaned_data['amount']
-            balance += amount
-            user_balance.save()
-            deposit = DepositForm()
-            print(f'You added ${amount}')
-       
-            #return redirect('user_dash')  # Redirect to a profile or dashboard page
-  
-        elif trade_form.is_valid():
-
-            order = trade_form.cleaned_data['order']
-            ticker = trade_form.cleaned_data['symbol']
-            volume = trade_form.cleaned_data['volume']
-            
-            if order == 'BUY':
-                price = live_price(ticker)
-                print(f'You are buying {ticker}')
-                try:
-                    stock = Stock.objects.get(symbol=ticker)
-                except Stock.DoesNotExist:
-                    if ticker == 'TSLA':
-                        stock = Stock.objects.create(symbol=ticker, name='Tesla Inc') 
-                        stock.save() # save stock
-                    elif ticker == 'NFLX':
-                        stock = Stock.objects.create(symbol=ticker, name='Netflix Inc') 
-                        stock.save() # save stock
-                    elif ticker == 'MSFT':
-                        stock = Stock.objects.create(symbol=ticker, name='Microsoft Corporation') 
-                        stock.save() # save stock
-                    elif ticker == 'NVDA':
-                        stock = Stock.objects.create(symbol=ticker, name='NVIDIA Corporation') 
-                        stock.save() # save stock
-                    elif ticker == 'AMZN':
-                        stock = Stock.objects.create(symbol=ticker, name='Amazon Inc') 
-                        stock.save() # save stock
-                    elif ticker == 'META':
-                        stock = Stock.objects.create(symbol=ticker, name='Meta Platforms Inc') 
-                        stock.save() # save stock
-                    elif ticker == 'BAC':
-                        stock = Stock.objects.create(symbol=ticker, name='Bank of America Corp') 
-                        stock.save() # save stock
-                    else:
-                        'Stock does not exist'
-
-
-
-                buy_stock(ticker, volume, price)# buy stock
-               
-                balance = round((Decimal(balance) - (Decimal(price)*Decimal(volume))),2)
-                user_balance.save()
-                trade_form = TransactionForm() # clearing the form
-                print(f'You bought {volume} shares of {ticker} at ${price}') # resport order
-            else:
-                print(f'You are selling {ticker}')
-                price = round(live_price(ticker), 2)
-                
-                sell_stock(ticker, volume, price)
-                
-                balance = round((Decimal(balance) + (Decimal(price)*Decimal(volume))), 2)
-                user_balance.save()
-                trade_form = TransactionForm()
-                print(f'You sold {volume} shares of {ticker} at ${price}')
-
-
-    else:
-        deposit = DepositForm()
-        trade_form = TransactionForm()
-        print('No order')
-        
- 
->>>>>>> main
     while True:
     #information    
     #-----------------stock data------------------
@@ -296,14 +175,6 @@ def user_dash(request):
         amzn_chart = chart('AMZN')
         meta_chart = chart('META')
         bac_chart = chart('BAC')
-<<<<<<< HEAD
-=======
- 
-        time.sleep(10) # 10s interval until fetches another data
-
-        
-
->>>>>>> main
 
         time.sleep(10) # 10s interval until fetches another data
     
@@ -311,11 +182,7 @@ def user_dash(request):
             'balance': balance,
             'reset': reset,
             'deposit': deposit,
-<<<<<<< HEAD
             'trader': trade_form,
-=======
-            'trader': trade_form,     
->>>>>>> main
             'port': myportfolio,
 
             # stock data
@@ -336,14 +203,10 @@ def user_dash(request):
             'amzn':amzn_chart,
             'meta': meta_chart,
             'bac': bac_chart,
-<<<<<<< HEAD
             
         } 
 
             
-=======
-        }
->>>>>>> main
 
         return render(request, 'user_dashboard.html', context)
 
@@ -354,8 +217,3 @@ def transactions(request):
     mytransactions = Transaction.objects.all()
     
     return render(request, 'transaction.html' ,{'trans': mytransactions,})
-<<<<<<< HEAD
-=======
-
-
->>>>>>> main
