@@ -29,26 +29,26 @@ def stock_data(ticker):
         data_history = stock.history(period='1d', interval='1m ')
         message = 'No data to display'
         current_price = stock.info.get('currentPrice')
-        price = round(current_price, 2)
-        current_price = stock.info.get('currentPrice')
-        price = round(current_price, 2)
+        price = round(current_price,2)
         if not data_history.empty:
             # Get the opening price (first price of the day)
             opening_price = data_history['Open'][0]
+            prev_close_price = stock.history(period='5d')['Close'].iloc[-2]
            
+            
             #getting the current bid
-            on_price = float(stock.info.get('bid', 'No data available'))
-            bid = round(on_price, 2)
+            bid = stock.info.get('bid', 'No data available')
+            #bid = round(on_price, 2)
 
 
             #Getting the current ask
-            off_price = stock.info.get('ask', 'No data available')
-            ask = round(off_price, 2)
+            ask = stock.info.get('ask', 'No data available')
+            #ask_round = round(off_price, 2)
 
 
             # Calculate daily change percentage
-            daily_change_percentage = ((price - opening_price) / opening_price) * 100
-            daily_change_percentage = ((price - opening_price) / opening_price) * 100
+            daily_change_percentage = ((current_price - prev_close_price) / prev_close_price) * 100
+            
             daily_change = round(daily_change_percentage, 2)
         else:
             print(message)
@@ -70,9 +70,22 @@ def chart(ticker):
 
 
     df = yf.download(ticker, start=start_period, end=end_period, interval=interval)
+    ''' # Get the data for the last 1 day with 1-minute interval
+    data = yf.Ticker(ticker).history(period='1d', interval='1m')
+    # Resample the data to hourly intervals
+    hourly_data = data['Close'].resample('1H').ohlc()  # Open, High, Low, Close for each hour
+
+    # Create a Plotly figure for candlestick chart
+    fig = go.Figure(data=[go.Candlestick(
+        x=hourly_data.index,
+        open=hourly_data['open'],
+        high=hourly_data['high'],
+        low=hourly_data['low'],
+        close=hourly_data['close'],
+    )])'''
 
     #chartting
-        # Create a mountain chart (area chart)
+    # Create a mountain chart (area chart)
     fig = go.Figure(data=[go.Candlestick(x=df.index,
                                         open=df['Open'],
                                         high=df['High'],
@@ -99,14 +112,11 @@ def live_price(ticker):
     stock_price = yf.Ticker(ticker).info.get('currentPrice')
     price = round(stock_price, 2)
     return price
-def live_price(ticker):
-    stock_price = yf.Ticker(ticker).info.get('currentPrice')
-    price = round(stock_price, 2)
-    return price
+
 #Trading operations 
 def buy_stock(ticker, volume, price):
     price = live_price(ticker)
-    price = live_price(ticker)
+   
     try:
         stock = Stock.objects.get(symbol = ticker)
     except Stock.DoesNotExist:
@@ -145,13 +155,13 @@ def buy_stock(ticker, volume, price):
 
  
        
-        return f'Successfully bought {volume} shares of {ticker} at ${price}.'
+       
 
  
 
 def sell_stock(ticker, volume, price):
     price = live_price(ticker)
-    price = live_price(ticker)
+    
     try:
         stock = Stock.objects.get(symbol=ticker)
     except Stock.DoesNotExist:
