@@ -2,12 +2,16 @@ from decimal import Decimal
 from django.db import transaction
 from django.apps import apps
 
+
 from .models import Account, Stock, Portfolio, Transaction
 from django.contrib.auth.decorators import login_required
 import yfinance as yf
 
+
 import datetime
 import plotly.graph_objs as go
+
+
 
 
 
@@ -19,10 +23,13 @@ def user_account(request):
 
 #Trading info
 
+
 def stock_data(ticker):
         stock = yf.Ticker(ticker)
         data_history = stock.history(period='1d', interval='1m ')
         message = 'No data to display'
+        current_price = stock.info.get('currentPrice')
+        price = round(current_price, 2)
         current_price = stock.info.get('currentPrice')
         price = round(current_price, 2)
         if not data_history.empty:
@@ -41,6 +48,7 @@ def stock_data(ticker):
 
             # Calculate daily change percentage
             daily_change_percentage = ((price - opening_price) / opening_price) * 100
+            daily_change_percentage = ((price - opening_price) / opening_price) * 100
             daily_change = round(daily_change_percentage, 2)
         else:
             print(message)
@@ -54,6 +62,7 @@ def stock_data(ticker):
 
 def chart(ticker):
     start_period = '2017-01-01'
+    today = datetime.date.today()
     today = datetime.date.today()
     end_period = today
     interval = '1d'
@@ -84,13 +93,19 @@ def chart(ticker):
     return ticker_chart
 
 #current price
+#current price
 
+def live_price(ticker):
+    stock_price = yf.Ticker(ticker).info.get('currentPrice')
+    price = round(stock_price, 2)
+    return price
 def live_price(ticker):
     stock_price = yf.Ticker(ticker).info.get('currentPrice')
     price = round(stock_price, 2)
     return price
 #Trading operations 
 def buy_stock(ticker, volume, price):
+    price = live_price(ticker)
     price = live_price(ticker)
     try:
         stock = Stock.objects.get(symbol = ticker)
@@ -112,7 +127,9 @@ def buy_stock(ticker, volume, price):
         portfolio.volume = total_volume
         portfolio.price = avg_price
         portfolio.profit = initial_profit
+        portfolio.profit = initial_profit
         portfolio.save()
+
 
 
         Transaction.objects.create(
@@ -127,8 +144,13 @@ def buy_stock(ticker, volume, price):
         return f'Successfully bought {volume} shares of {ticker} at ${price}.'
 
  
+       
+        return f'Successfully bought {volume} shares of {ticker} at ${price}.'
+
+ 
 
 def sell_stock(ticker, volume, price):
+    price = live_price(ticker)
     price = live_price(ticker)
     try:
         stock = Stock.objects.get(symbol=ticker)
@@ -144,9 +166,19 @@ def sell_stock(ticker, volume, price):
             return "Not enough stock to sell."
 
      
+     
     with transaction.atomic():
         total_revenue = Decimal(volume)*Decimal(price)
         new_volume = Decimal(portfolio.volume) - Decimal(volume)
+        
+        if volume < portfolio.volume:
+            partial_profit = round(((Decimal(portfolio.price) - Decimal(price))*Decimal(volume)),2)
+            portfolio.profit = partial_profit
+            portfolio.save()
+        if volume == portfolio.volume:
+            total_profit = round(((Decimal(portfolio.price) - Decimal(price))*Decimal(portfolio.volume)),2)
+            portfolio.profit = total_profit
+            portfolio.save()
         
         if volume < portfolio.volume:
             partial_profit = round(((Decimal(portfolio.price) - Decimal(price))*Decimal(volume)),2)

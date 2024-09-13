@@ -143,6 +143,3 @@ function closeBtn(){
 
 
 
-
-
-

@@ -12,6 +12,7 @@ from .models import Account, Transaction, Deposit
 from .functions import *
 
 #Static pages/routes
+#Static pages/routes
 def base(request):
     return render(request, 'base.html')
 
@@ -49,6 +50,26 @@ def register_user(request):
         form = RegisterUserForm()       
     return render(request, 'registration_form.html', {'form': form,})
 
+#reset account
+@login_required
+def reset_account(request):
+    user_balance, created = Account.objects.get_or_create(user=request.user)
+    
+    
+    if request.method ==  'POST':
+        reset = ResetForm(request.POST, prefix='reset_account')
+        if reset.is_valid():
+            portfolio = Portfolio.objects.all().delete()
+            initial_balance = 100000 # $100,000.00
+            user_balance.balance = initial_balance # Reset Balance
+            user_balance.save()
+            reset = ResetForm()
+            redirect('/user_dash')
+            print('Account reset')
+        else:
+            reset = ResetForm()
+            print('Account not reset')
+    return render(request, 'user_dashboard.html', {'reset': reset,})
 
 #User dashboard
 @login_required
@@ -158,10 +179,17 @@ def user_dash(request):
     while True:
     #information    
     #-----------------stock data------------------
+    #information    
+    #-----------------stock data------------------
         aapl = stock_data('AAPL')
         tsla = stock_data('TSLA')
         nflx = stock_data('NFLX')
         msft = stock_data('MSFT')
+        nvda = stock_data('NVDA')
+        amzn = stock_data('AMZN')
+        meta = stock_data('META')
+        bac = stock_data('BAC')
+        #-----------stock chart-----------------------
         nvda = stock_data('NVDA')
         amzn = stock_data('AMZN')
         meta = stock_data('META')
@@ -190,6 +218,10 @@ def user_dash(request):
             'TSLA': tsla,
             'NFLX': nflx,
             'MSFT': msft,
+            'NVDA': nvda,
+            'AMZN': amzn,
+            'META': meta,
+            'BAC': bac,
             'NVDA': nvda,
             'AMZN': amzn,
             'META': meta,
